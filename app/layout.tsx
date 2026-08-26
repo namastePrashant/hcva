@@ -13,8 +13,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host") ?? "localhost:3000";
   const protocol = requestHeaders.get("x-forwarded-proto") ?? (host.startsWith("localhost") ? "http" : "https");
   const origin = `${protocol}://${host}`;
-  const title = "Humanitarian CVA | The Global Humanitarian Cash Hub";
-  const description = "An independent global platform for Cash and Voucher Assistance learning, events, opportunities, tools, and response knowledge.";
+  const title = "Humanitarian CVA | Digital Systems, Advisory & Knowledge";
+  const description = "Aria Technologies’ global platform for Cash and Voucher Assistance digital services, consulting, Lali360 tools, learning, and sector knowledge.";
   const socialImage = `${origin}/og-hcva.png`;
 
   return {

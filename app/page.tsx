@@ -137,6 +137,7 @@ const omniReplies: Record<string, string> = {
   job: "There is one time-sensitive opening in this snapshot: British Red Cross CVA Coordinator — Syria, closing 30 August 2026. Open the Opportunities section for the full summary.",
   event: "The next listed event is the Eastern Africa Dialogue Platform on Anticipatory Action, 28–30 October 2026 in Mombasa, Kenya.",
   protection: "The CVA and Child Protection e-Course is the strongest match. It covers assessment, design, implementation, safeguarding, and age- and gender-specific risks.",
+  services: "Humanitarian CVA brings together Aria Technologies’ CVA advisory, digital system design, implementation support, and capacity strengthening. Lali360 is the flagship platform supporting the project cycle from assessment to reporting.",
 };
 
 function answerOmni(message: string) {
@@ -145,6 +146,7 @@ function answerOmni(message: string) {
   if (value.includes("job") || value.includes("career") || value.includes("opening")) return omniReplies.job;
   if (value.includes("event") || value.includes("conference")) return omniReplies.event;
   if (value.includes("protection") || value.includes("child")) return omniReplies.protection;
+  if (value.includes("service") || value.includes("consult") || value.includes("lali360") || value.includes("digital")) return omniReplies.services;
   return omniReplies.beginner;
 }
 
@@ -186,22 +188,22 @@ export default function Home() {
           <img src="/hcva-logo.jpeg" alt="HCVA — Humanitarian Cash and Voucher Assistance" />
         </a>
         <nav aria-label="Primary navigation">
+          <a href="#services">Services</a>
+          <a href="#lali360">Lali360</a>
           <a href="#learn">Learn</a>
-          <a href="#events">Events</a>
           <a href="#opportunities">Opportunities</a>
-          <a href="#about">About</a>
         </nav>
         <button className="ask-button" onClick={() => setOmniOpen(true)}>Ask Omni <span>↗</span></button>
       </header>
 
       <section className="hero" id="top">
         <div className="hero-copy">
-          <p className="eyebrow"><span /> Independent · Global · Practical</p>
-          <h1>The global home for<br/><em>humanitarian cash.</em></h1>
-          <p className="hero-deck">An independent gateway for the global Cash and Voucher Assistance community—bringing trusted knowledge, learning, events, and opportunities into one practical place.</p>
+          <p className="eyebrow"><span /> Digital systems · CVA advisory · Global knowledge</p>
+          <h1>Digital confidence for<br/><em>humanitarian cash.</em></h1>
+          <p className="hero-deck">Humanitarian CVA is Aria Technologies’ global platform for CVA digital services and consulting, powered by field expertise and the Lali360 tool—built in Nepal, ready for South Asia and the world.</p>
           <div className="hero-actions">
-            <a className="primary-cta" href="#learn">Explore the knowledge hub <span>→</span></a>
-            <a className="text-cta" href="#opportunities">Browse opportunities</a>
+            <a className="primary-cta" href="#services">Explore our services <span>→</span></a>
+            <a className="text-cta" href="#lali360">Discover Lali360</a>
           </div>
           <div className="domain-row"><span>humanitariancva.org</span><span>humanitariancva.com</span></div>
         </div>
@@ -229,10 +231,39 @@ export default function Home() {
       </section>
 
       <section className="orientation-strip" aria-label="Platform sections">
-        <a href="#learn"><span>01</span><b>Learn</b><small>Courses, guidance & tools</small><i>↘</i></a>
-        <a href="#events"><span>02</span><b>Connect</b><small>Events & community</small><i>↘</i></a>
-        <a href="#opportunities"><span>03</span><b>Act</b><small>Jobs & opportunities</small><i>↘</i></a>
+        <a href="#services"><span>01</span><b>Advise</b><small>CVA consulting & digital strategy</small><i>↘</i></a>
+        <a href="#lali360"><span>02</span><b>Digitise</b><small>Lali360 project-cycle tools</small><i>↘</i></a>
+        <a href="#learn"><span>03</span><b>Strengthen</b><small>Learning, guidance & knowledge</small><i>↘</i></a>
         <a href="#five-w"><span>04</span><b>Coordinate</b><small>5W matrix · coming soon</small><i>↘</i></a>
+      </section>
+
+      <section className="services-section" id="services">
+        <div className="section-heading">
+          <div><p className="kicker">Aria Technologies · CVA practice</p><h2>Field understanding.<br/><em>Digital execution.</em></h2></div>
+          <p>We help humanitarian actors translate Cash and Voucher Assistance requirements into practical systems, stronger workflows, and evidence-led decisions.</p>
+        </div>
+        <div className="service-grid">
+          <article><span>01</span><p>Advisory</p><h3>CVA strategy & process design</h3><small>Programme workflows, digital readiness, data pathways, controls, and implementation planning grounded in humanitarian practice.</small></article>
+          <article><span>02</span><p>Digital services</p><h3>Systems that work in the field</h3><small>Configuration, integration, deployment, and support for CVA operations—including low-connectivity and offline environments.</small></article>
+          <article><span>03</span><p>Capacity</p><h3>Teams ready to deliver</h3><small>Practical training, coaching, and knowledge services that connect technology with programme quality and accountability.</small></article>
+        </div>
+      </section>
+
+      <section className="lali-section" id="lali360">
+        <div className="lali-copy">
+          <p className="kicker">Flagship platform · Lali360</p>
+          <h2>One project cycle.<br/><em>One practical system.</em></h2>
+          <p>Lali360 is Aria Technologies’ end-to-end digital tool for organisations delivering CVA and humanitarian programmes—from assessment and registration to distribution, reconciliation, monitoring, and reporting.</p>
+          <a href="https://lali360.com/" target="_blank" rel="noreferrer" className="lali-cta">Explore Lali360 <b>↗</b></a>
+        </div>
+        <div className="lali-cycle" aria-label="Lali360 project cycle">
+          <div><span>01</span><b>Assess</b><small>Needs & markets</small></div>
+          <div><span>02</span><b>Register</b><small>People & vendors</small></div>
+          <div><span>03</span><b>Deliver</b><small>Cash, vouchers & in-kind</small></div>
+          <div><span>04</span><b>Monitor</b><small>PDM & feedback</small></div>
+          <div><span>05</span><b>Report</b><small>Dashboards & evidence</small></div>
+        </div>
+        <div className="regional-ribbon"><span>Built in Nepal</span><span>Designed for South Asia</span><span>Ready globally</span></div>
       </section>
 
       <section className="learning-section" id="learn">
@@ -332,21 +363,22 @@ export default function Home() {
             <button onClick={() => { setOmniOpen(true); askOmni("I’m new to CVA. Where should I begin?"); }}>I’m new to CVA</button>
             <button onClick={() => { setOmniOpen(true); askOmni("Help me learn market analysis"); }}>Learn market analysis</button>
             <button onClick={() => { setOmniOpen(true); askOmni("Show me CVA jobs"); }}>Find a CVA role</button>
+            <button onClick={() => { setOmniOpen(true); askOmni("Tell me about your digital services and Lali360"); }}>Explore our services</button>
           </div>
           <button className="primary-cta omni-cta" onClick={() => setOmniOpen(true)}>Start a conversation <span>→</span></button>
         </div>
       </section>
 
       <section className="about-section" id="about">
-        <div className="about-index">GLOBAL / CVA</div>
+        <div className="about-index">NEPAL / SOUTH ASIA / GLOBAL</div>
         <div>
-          <p className="kicker">About Humanitarian CVA</p>
-          <h2>An independent global home for the humanitarian cash community.</h2>
+          <p className="kicker">Backed by Aria Technologies</p>
+          <h2>From Nepal, building South Asia’s trusted CVA technology practice.</h2>
         </div>
         <div className="about-copy">
-          <p>Humanitarian CVA is an independent global platform created to strengthen the people, knowledge, and coordination behind Cash and Voucher Assistance.</p>
-          <p>It grows from the practical humanitarian and technology experience behind Lali360—from assessment and registration through distribution, monitoring, and reporting—while serving the wider cash community beyond any single product or organisation.</p>
-          <p>Our purpose is simple: make trusted learning, events, opportunities, tools, and response knowledge easier to discover and apply worldwide.</p>
+          <p>Humanitarian CVA is the global-facing platform for Aria Technologies’ digital services, consulting, and sector knowledge related to Cash and Voucher Assistance.</p>
+          <p>Lali360 is our flagship product: an end-to-end tool shaped by real humanitarian workflows and challenging field environments.</p>
+          <p>Our ambition is to become Nepal’s first-choice CVA technology partner, South Asia’s most trusted specialist, and a meaningful contributor to humanitarian cash practice worldwide.</p>
         </div>
       </section>
 
@@ -361,9 +393,9 @@ export default function Home() {
 
       <footer>
         <a className="brand hcva-brand footer-brand" href="#top"><img src="/hcva-logo.jpeg" alt="HCVA — Humanitarian Cash and Voucher Assistance" /></a>
-        <p><strong>humanitariancva.org</strong><span>Trusted paths into humanitarian cash knowledge.</span></p>
-        <div><a href="#learn">Learn</a><a href="#events">Events</a><a href="#opportunities">Opportunities</a><a href="#about">About</a></div>
-        <small>© 2026 Humanitarian CVA · humanitariancva.org · humanitariancva.com · Source records remain the property of their publishers.</small>
+        <p><strong>humanitariancva.org</strong><span>An Aria Technologies initiative for CVA digital services, tools, and knowledge.</span></p>
+        <div><a href="#services">Services</a><a href="#lali360">Lali360</a><a href="#learn">Learn</a><a href="#about">About</a></div>
+        <small>© 2026 Humanitarian CVA · Aria Technologies · humanitariancva.org · humanitariancva.com · Source records remain the property of their publishers.</small>
       </footer>
 
       <button className="omni-fab" onClick={() => setOmniOpen(!omniOpen)} aria-label={omniOpen ? "Close Omni assistant" : "Open Omni assistant"}><span>{omniOpen ? "×" : "✦"}</span>{!omniOpen && <b>Ask Omni</b>}</button>
