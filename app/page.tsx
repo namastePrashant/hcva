@@ -182,9 +182,8 @@ export default function Home() {
   return (
     <main>
       <header className="site-header">
-        <a className="brand" href="#top" aria-label="Lali360 home">
-          <span className="brand-mark">L</span>
-          <span>Lali<span>360</span></span>
+        <a className="brand hcva-brand" href="#top" aria-label="Humanitarian CVA home">
+          <img src="/hcva-logo.jpeg" alt="HCVA — Humanitarian Cash and Voucher Assistance" />
         </a>
         <nav aria-label="Primary navigation">
           <a href="#learn">Learn</a>
@@ -197,13 +196,14 @@ export default function Home() {
 
       <section className="hero" id="top">
         <div className="hero-copy">
-          <p className="eyebrow"><span /> Humanitarian cash, made clearer</p>
-          <h1>One place for the<br/><em>cash community.</em></h1>
-          <p className="hero-deck">Find trusted CVA guidance, build practical skills, discover sector events, and move your humanitarian career forward.</p>
+          <p className="eyebrow"><span /> Independent · Global · Practical</p>
+          <h1>The global home for<br/><em>humanitarian cash.</em></h1>
+          <p className="hero-deck">An independent gateway for the global Cash and Voucher Assistance community—bringing trusted knowledge, learning, events, and opportunities into one practical place.</p>
           <div className="hero-actions">
             <a className="primary-cta" href="#learn">Explore the knowledge hub <span>→</span></a>
             <a className="text-cta" href="#opportunities">Browse opportunities</a>
           </div>
+          <div className="domain-row"><span>humanitariancva.org</span><span>humanitariancva.com</span></div>
         </div>
 
         <div className="signal-panel" aria-label="Latest platform signals">
@@ -327,7 +327,7 @@ export default function Home() {
         <div className="omni-copy">
           <p className="kicker">Your CVA guide</p>
           <h2>Ask a better question.<br/><em>Find a useful next step.</em></h2>
-          <p>Omni helps you navigate the curated Lali360 library—from “where do I start?” to the right toolkit for your programme.</p>
+          <p>Omni helps you navigate the curated Humanitarian CVA library—from “where do I start?” to the right toolkit for your programme.</p>
           <div className="prompt-row">
             <button onClick={() => { setOmniOpen(true); askOmni("I’m new to CVA. Where should I begin?"); }}>I’m new to CVA</button>
             <button onClick={() => { setOmniOpen(true); askOmni("Help me learn market analysis"); }}>Learn market analysis</button>
@@ -338,14 +338,15 @@ export default function Home() {
       </section>
 
       <section className="about-section" id="about">
-        <div className="about-index">L / 360</div>
+        <div className="about-index">GLOBAL / CVA</div>
         <div>
-          <p className="kicker">About Lali360</p>
-          <h2>A clearer field of view for humanitarian cash.</h2>
+          <p className="kicker">About Humanitarian CVA</p>
+          <h2>An independent global home for the humanitarian cash community.</h2>
         </div>
         <div className="about-copy">
-          <p>Lali360 is an independent knowledge gateway designed to make Cash and Voucher Assistance easier to learn, navigate, and apply.</p>
-          <p>We bring trusted sector learning, events, and opportunities into one practical place—while always sending you back to the original source for the full, authoritative record.</p>
+          <p>Humanitarian CVA is an independent global platform created to strengthen the people, knowledge, and coordination behind Cash and Voucher Assistance.</p>
+          <p>It grows from the practical humanitarian and technology experience behind Lali360—from assessment and registration through distribution, monitoring, and reporting—while serving the wider cash community beyond any single product or organisation.</p>
+          <p>Our purpose is simple: make trusted learning, events, opportunities, tools, and response knowledge easier to discover and apply worldwide.</p>
         </div>
       </section>
 
@@ -359,10 +360,10 @@ export default function Home() {
       </section>
 
       <footer>
-        <a className="brand footer-brand" href="#top"><span className="brand-mark">L</span><span>Lali<span>360</span></span></a>
-        <p>Trusted paths into humanitarian cash knowledge.</p>
+        <a className="brand hcva-brand footer-brand" href="#top"><img src="/hcva-logo.jpeg" alt="HCVA — Humanitarian Cash and Voucher Assistance" /></a>
+        <p><strong>humanitariancva.org</strong><span>Trusted paths into humanitarian cash knowledge.</span></p>
         <div><a href="#learn">Learn</a><a href="#events">Events</a><a href="#opportunities">Opportunities</a><a href="#about">About</a></div>
-        <small>© 2026 Lali360 · Source records remain the property of their publishers.</small>
+        <small>© 2026 Humanitarian CVA · humanitariancva.org · humanitariancva.com · Source records remain the property of their publishers.</small>
       </footer>
 
       <button className="omni-fab" onClick={() => setOmniOpen(!omniOpen)} aria-label={omniOpen ? "Close Omni assistant" : "Open Omni assistant"}><span>{omniOpen ? "×" : "✦"}</span>{!omniOpen && <b>Ask Omni</b>}</button>
@@ -375,7 +376,7 @@ export default function Home() {
           {conversation.length === 0 && <div className="chat-suggestions"><button onClick={() => askOmni("I’m new to CVA. Where should I begin?")}>Where should a beginner start?</button><button onClick={() => askOmni("Help me learn market analysis")}>Help me learn market analysis</button><button onClick={() => askOmni("Show me CVA jobs")}>Show me current openings</button></div>}
         </div>
         <form className="omni-input" onSubmit={submitOmni}><input value={omniInput} onChange={(event) => setOmniInput(event.target.value)} placeholder="Ask about CVA…" aria-label="Ask Omni"/><button aria-label="Send question">↑</button></form>
-        <small className="omni-disclaimer">Omni answers from the curated Lali360 snapshot.</small>
+        <small className="omni-disclaimer">Omni answers from the curated Humanitarian CVA snapshot.</small>
       </aside>
     </main>
   );

@@ -13,9 +13,9 @@ export async function generateMetadata(): Promise<Metadata> {
   const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host") ?? "localhost:3000";
   const protocol = requestHeaders.get("x-forwarded-proto") ?? (host.startsWith("localhost") ? "http" : "https");
   const origin = `${protocol}://${host}`;
-  const title = "Lali360 | Humanitarian Cash Knowledge Hub";
-  const description = "Trusted CVA learning, sector events, jobs, tools, and guidance in one practical humanitarian cash portal.";
-  const socialImage = `${origin}/og.png`;
+  const title = "Humanitarian CVA | The Global Humanitarian Cash Hub";
+  const description = "An independent global platform for Cash and Voucher Assistance learning, events, opportunities, tools, and response knowledge.";
+  const socialImage = `${origin}/og-hcva.png`;
 
   return {
     metadataBase: new URL(origin),
@@ -25,8 +25,8 @@ export async function generateMetadata(): Promise<Metadata> {
       title,
       description,
       type: "website",
-      siteName: "Lali360",
-      images: [{ url: socialImage, width: 1731, height: 909, alt: "Lali360 — One place for the cash community." }],
+      siteName: "Humanitarian CVA",
+      images: [{ url: socialImage, width: 1731, height: 909, alt: "Humanitarian CVA — The global home for humanitarian cash." }],
     },
     twitter: {
       card: "summary_large_image",
