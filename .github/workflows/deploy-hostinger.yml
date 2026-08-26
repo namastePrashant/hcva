@@ -1,0 +1,44 @@
+name: Build Hostinger deployment branch
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-static-site:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Hostinger-compatible site
+        run: npm run build:hostinger
+        env:
+          HCVA_PUBLIC_ORIGIN: ${{ vars.HCVA_PUBLIC_ORIGIN || 'https://mediumspringgreen-hippopotamus-622206.hostingersite.com' }}
+
+      - name: Publish static files to hostinger-static
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd hostinger-dist
+          git init
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Deploy HCVA static site from ${GITHUB_SHA}"
+          git branch -M hostinger-static
+          git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git push --force origin hostinger-static

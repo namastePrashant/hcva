@@ -29,3 +29,13 @@ HCVA_PUBLIC_ORIGIN=https://mediumspringgreen-hippopotamus-622206.hostingersite.c
 7. Clear the Hostinger CDN cache and reload the site.
 
 The exported package contains static HTML for every public route. Server-only features would require a Hostinger VPS or another Node/Cloudflare-compatible host.
+
+## Deploy from GitHub
+
+The repository includes a generated `hostinger-static` branch. In Hostinger's Git deployment settings use:
+
+- Repository: `https://github.com/namastePrashant/hcva.git`
+- Branch: `hostinger-static`
+- Install path: leave it empty so Hostinger deploys directly to `/public_html`
+
+The GitHub workflow rebuilds and replaces this deployment branch whenever `main` changes. In Hostinger, enable Auto Deployment for the `hostinger-static` branch if you want new pushes to publish automatically.
