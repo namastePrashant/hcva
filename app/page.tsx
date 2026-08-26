@@ -127,9 +127,90 @@ const resources: Resource[] = [
     description: "Assess organisational readiness, identify gaps, and turn findings into a CVA capacity action plan.",
     url: "https://www.calpnetwork.org/publication/organizational-cash-readiness-tool-ocrt-process-guide/",
   },
+  {
+    title: "Checklist for Basic CVA Readiness",
+    provider: "Cash Hub · IFRC · ICRC",
+    format: "Operational checklist",
+    level: "Intermediate",
+    topic: "Preparedness",
+    duration: "Quick reference",
+    description: "Establish minimum readiness through focal points, feasibility, SOPs, and early financial-service-provider engagement.",
+    url: "https://cash-hub.org/resource/checklist-for-basic-cash-and-voucher-assistance-cva-readiness/",
+  },
+  {
+    title: "Cash Hub Online Course Library",
+    provider: "Cash Hub",
+    format: "Course collection",
+    level: "Foundation",
+    topic: "CVA essentials",
+    duration: "Self-paced",
+    description: "Navigate free learning on core skills, markets, delivery mechanisms, monitoring, social protection, and operations.",
+    url: "https://cash-hub.org/training-and-development/online-courses/",
+  },
+  {
+    title: "Cash Transfers: How WFP Works",
+    provider: "World Food Programme",
+    format: "Operational overview",
+    level: "Foundation",
+    topic: "CVA essentials",
+    duration: "Briefing",
+    description: "See how humanitarian cash supports choice, local markets, financial inclusion, and government safety nets at scale.",
+    url: "https://www.wfp.org/cash-transfers",
+  },
+  {
+    title: "WFP Cash Policy",
+    provider: "World Food Programme",
+    format: "Policy",
+    level: "Advanced",
+    topic: "Programme quality",
+    duration: "Strategic reference",
+    description: "Explore a people-centred policy for maximising the humanitarian and longer-term impact of cash transfers.",
+    url: "https://www.wfp.org/publications/wfp-cash-policy-harnessing-power-money-help-people-survive-and-thrive",
+  },
+  {
+    title: "Information Management & Technology",
+    provider: "Cash Hub",
+    format: "Resource collection",
+    level: "Advanced",
+    topic: "Digital payments",
+    duration: "Field reference",
+    description: "Guidance and examples for responsible data, cash information management, digital platforms, and technology-enabled CVA.",
+    url: "https://cash-hub.org/resources/im-and-technology/",
+    featured: true,
+  },
+  {
+    title: "Mobilising CVA: The Case for Mobile Money",
+    provider: "GSMA",
+    format: "Operational handbook",
+    level: "Advanced",
+    topic: "Digital payments",
+    duration: "Implementation guide",
+    description: "Assess enabling environments, partnerships, delivery options, risks, and operations for mobile-enabled cash assistance.",
+    url: "https://www.gsma.com/solutions-and-impact/connectivity-for-good/mobile-for-development/programme/mobile-for-humanitarian-innovation/is-mobile-money-the-future-of-cash-and-voucher-assistance/",
+  },
+  {
+    title: "CVA in Anticipatory Action: What Have We Learned?",
+    provider: "Cash Hub",
+    format: "2026 research",
+    level: "Advanced",
+    topic: "Anticipatory action",
+    duration: "Research report",
+    description: "Review emerging learning on how CVA is being used before predictable hazards across the Red Cross and Red Crescent Movement.",
+    url: "https://cash-hub.org/",
+  },
+  {
+    title: "State of the World’s Cash 2023",
+    provider: "CALP Network",
+    format: "Global report",
+    level: "Advanced",
+    topic: "Programme quality",
+    duration: "Sector analysis",
+    description: "A comprehensive view of progress, persistent gaps, and priorities shaping humanitarian cash assistance worldwide.",
+    url: "https://www.calpnetwork.org/wp-content/uploads/2023/11/The-State-of-the-Worlds-Cash-2023-1.pdf",
+  },
 ];
 
-const topics = ["All", "CVA essentials", "Market analysis", "Protection", "Inclusion", "Programme quality", "Responsible data", "Preparedness"];
+const topics = ["All", "CVA essentials", "Market analysis", "Digital payments", "Anticipatory action", "Protection", "Inclusion", "Programme quality", "Responsible data", "Preparedness"];
 
 const omniReplies: Record<string, string> = {
   beginner: "Start with Kaya’s CVA Fundamentals course, then use CALP’s Cash 101 and Glossary as desk references. Together they cover core terms, feasibility, modalities, and the project cycle.",
@@ -157,6 +238,8 @@ export default function Home() {
   const [omniOpen, setOmniOpen] = useState(false);
   const [omniInput, setOmniInput] = useState("");
   const [conversation, setConversation] = useState<string[]>([]);
+  const [megaOpen, setMegaOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const filtered = useMemo(() => {
     const needle = query.trim().toLowerCase();
@@ -183,18 +266,39 @@ export default function Home() {
 
   return (
     <main>
-      <header className="site-header">
+      <header className="site-header" onMouseLeave={() => setMegaOpen(false)}>
         <a className="brand hcva-brand" href="#top" aria-label="Humanitarian CVA home">
           <img src="/hcva-logo.jpeg" alt="HCVA — Humanitarian Cash and Voucher Assistance" />
         </a>
-        <nav aria-label="Primary navigation">
+        <nav className="desktop-nav" aria-label="Primary navigation">
+          <button className="mega-trigger" aria-expanded={megaOpen} onMouseEnter={() => setMegaOpen(true)} onFocus={() => setMegaOpen(true)} onClick={() => setMegaOpen(!megaOpen)}>Explore <span>⌄</span></button>
           <a href="#services">Services</a>
           <a href="#lali360">Lali360</a>
-          <a href="#learn">Learn</a>
-          <a href="#opportunities">Opportunities</a>
+          <a href="#insights">Insights</a>
+          <a href="#about">About</a>
         </nav>
-        <button className="ask-button" onClick={() => setOmniOpen(true)}>Ask Omni <span>↗</span></button>
+        <div className="header-actions">
+          <button className="ask-button" onClick={() => setOmniOpen(true)}>Ask Omni <span>↗</span></button>
+          <button className="mobile-toggle" aria-expanded={mobileOpen} onClick={() => setMobileOpen(!mobileOpen)}>{mobileOpen ? "Close" : "Menu"}</button>
+        </div>
+        <div className={`mega-menu ${megaOpen ? "open" : ""}`}>
+          <div className="mega-column"><span>What we do</span><a href="#services" onClick={() => setMegaOpen(false)}><b>CVA advisory</b><small>Strategy, readiness & process design</small></a><a href="#services" onClick={() => setMegaOpen(false)}><b>Digital services</b><small>Implementation, integration & support</small></a><a href="#lali360" onClick={() => setMegaOpen(false)}><b>Lali360 platform</b><small>The complete humanitarian project cycle</small></a></div>
+          <div className="mega-column"><span>Knowledge</span><a href="#learn" onClick={() => setMegaOpen(false)}><b>Resource library</b><small>19 curated courses, tools & reports</small></a><a href="#practice" onClick={() => setMegaOpen(false)}><b>Practice areas</b><small>Markets, data, payments, protection & more</small></a><a href="#insights" onClick={() => setMegaOpen(false)}><b>Sector intelligence</b><small>What is changing in humanitarian cash</small></a></div>
+          <div className="mega-column"><span>Community</span><a href="#events" onClick={() => setMegaOpen(false)}><b>Events & training</b><small>Global and regional opportunities</small></a><a href="#opportunities" onClick={() => setMegaOpen(false)}><b>Jobs & consultancies</b><small>Build a career in humanitarian cash</small></a><a href="#five-w" onClick={() => setMegaOpen(false)}><b>5W coordination</b><small>Our next data product</small></a></div>
+          <a className="mega-feature" href="https://www.calpnetwork.org/event/calp-core-cva-skills-for-programme-staff-course-in-the-nepal/" target="_blank" rel="noreferrer"><span>Happening now · Kathmandu</span><b>CALP Core CVA Skills for Programme Staff</b><small>24–28 August 2026 · With Aria Technologies</small><i>↗</i></a>
+        </div>
       </header>
+
+      <div className={`mobile-menu ${mobileOpen ? "open" : ""}`}>
+        <a href="#services" onClick={() => setMobileOpen(false)}>Services <span>01</span></a>
+        <a href="#lali360" onClick={() => setMobileOpen(false)}>Lali360 <span>02</span></a>
+        <a href="#learn" onClick={() => setMobileOpen(false)}>Knowledge hub <span>03</span></a>
+        <a href="#practice" onClick={() => setMobileOpen(false)}>Practice areas <span>04</span></a>
+        <a href="#insights" onClick={() => setMobileOpen(false)}>Insights <span>05</span></a>
+        <a href="#events" onClick={() => setMobileOpen(false)}>Events <span>06</span></a>
+        <a href="#opportunities" onClick={() => setMobileOpen(false)}>Opportunities <span>07</span></a>
+        <a href="#about" onClick={() => setMobileOpen(false)}>About <span>08</span></a>
+      </div>
 
       <section className="hero" id="top">
         <div className="hero-copy">
@@ -219,13 +323,13 @@ export default function Home() {
             <p>28–30 October · Mombasa, Kenya</p>
           </div>
           <div className="signal-stats">
-            <div><strong>11</strong><span>curated resources</span></div>
+            <div><strong>19</strong><span>curated resources</span></div>
             <div><strong>01</strong><span>upcoming event</span></div>
             <div><strong>01</strong><span>active opening</span></div>
           </div>
           <div className="source-row">
             <span>Sourced from</span>
-            <b>ReliefWeb</b><b>CALP</b><b>Kaya</b><b>DisasterReady</b>
+            <b>CALP</b><b>Cash Hub</b><b>ReliefWeb</b><b>WFP</b><b>GSMA</b><b>Kaya</b>
           </div>
         </div>
       </section>
@@ -264,6 +368,20 @@ export default function Home() {
           <div><span>05</span><b>Report</b><small>Dashboards & evidence</small></div>
         </div>
         <div className="regional-ribbon"><span>Built in Nepal</span><span>Designed for South Asia</span><span>Ready globally</span></div>
+      </section>
+
+      <section className="practice-section" id="practice">
+        <div className="practice-intro"><p className="kicker">CVA practice areas</p><h2>Explore the field<br/><em>from every angle.</em></h2><p>Humanitarian CVA connects technology and knowledge across the full programme cycle and the specialist disciplines that make cash assistance safe, effective, and accountable.</p></div>
+        <div className="practice-grid">
+          <a href="#learn" onClick={() => setTopic("CVA essentials")}><span>01</span><b>Foundations & response options</b><small>Terminology, feasibility, modalities, and programme-cycle essentials.</small><i>→</i></a>
+          <a href="#learn" onClick={() => setTopic("Market analysis")}><span>02</span><b>Markets & response analysis</b><small>Understand supply, access, risks, and the case for different response options.</small><i>→</i></a>
+          <a href="#learn" onClick={() => setTopic("Digital payments")}><span>03</span><b>Digital payments & FSPs</b><small>Delivery mechanisms, mobile money, financial inclusion, and reconciliation.</small><i>→</i></a>
+          <a href="#learn" onClick={() => setTopic("Responsible data")}><span>04</span><b>Data responsibility & IM</b><small>Responsible registration, secure information flows, reporting, and digital identity.</small><i>→</i></a>
+          <a href="#learn" onClick={() => setTopic("Protection")}><span>05</span><b>Protection & inclusion</b><small>Safeguarding, disability inclusion, gender, and community-centred delivery.</small><i>→</i></a>
+          <a href="#learn" onClick={() => setTopic("Programme quality")}><span>06</span><b>MEAL & accountability</b><small>Quality standards, monitoring, feedback, adaptation, and evidence.</small><i>→</i></a>
+          <a href="#learn" onClick={() => setTopic("Preparedness")}><span>07</span><b>Preparedness & coordination</b><small>Readiness, SOPs, partnerships, cash working groups, and 5W visibility.</small><i>→</i></a>
+          <a href="#learn" onClick={() => setTopic("Anticipatory action")}><span>08</span><b>Anticipatory action</b><small>Cash before predictable hazards, triggers, risk financing, and timely delivery.</small><i>→</i></a>
+        </div>
       </section>
 
       <section className="learning-section" id="learn">
@@ -308,7 +426,30 @@ export default function Home() {
           ))}
         </div>
         {filtered.length === 0 && <div className="empty-state"><b>No direct match yet.</b><span>Try a broader keyword or choose “All”.</span></div>}
-        {!showAll && !query && topic === "All" && <button className="load-more" onClick={() => setShowAll(true)}>View all 11 resources <span>↓</span></button>}
+        {!showAll && !query && topic === "All" && <button className="load-more" onClick={() => setShowAll(true)}>View all 19 resources <span>↓</span></button>}
+      </section>
+
+      <section className="intelligence-section" id="insights">
+        <div className="section-heading">
+          <div><p className="kicker">Sector intelligence</p><h2>Signals shaping<br/><em>the future of cash.</em></h2></div>
+          <p>Fresh evidence and operational learning selected for decision-makers, programme teams, and technology partners.</p>
+        </div>
+        <div className="intelligence-layout">
+          <a className="nepal-spotlight" href="https://www.gsma.com/solutions-and-impact/connectivity-for-good/mobile-for-development/impact-report/humanitarian/" target="_blank" rel="noreferrer">
+            <div className="spotlight-top"><span>Nepal spotlight</span><b>Digital ecosystem</b></div>
+            <h3>Humanitarian cash is becoming an ecosystem—not just a transfer.</h3>
+            <p>A national workshop in Nepal brought government, donors, mobile operators, fintechs, and humanitarian agencies together. Follow-on work with eSewa, WFP, CARE, and Nepal Red Cross connected financial literacy and preparedness training to more than 116,000 people.</p>
+            <div><span>GSMA humanitarian impact report</span><b>Read the evidence ↗</b></div>
+          </a>
+          <div className="latest-stack">
+            <a href="https://cash-hub.org/" target="_blank" rel="noreferrer"><span>20 Aug 2026 · Cash Hub</span><h3>CVA in Anticipatory Action: What Have We Learned?</h3><b>Research report ↗</b></a>
+            <a href="https://cash-hub.org/" target="_blank" rel="noreferrer"><span>18 Aug 2026 · Cash Hub</span><h3>Reshaping Readiness: Optimising Cash Preparedness</h3><b>Critical analysis ↗</b></a>
+            <a href="https://cash-hub.org/" target="_blank" rel="noreferrer"><span>10 Aug 2026 · Cash Hub</span><h3>CVA in Ebola Virus Disease Response</h3><b>Guidance note ↗</b></a>
+          </div>
+        </div>
+        <a className="evidence-strip" href="https://www.wfp.org/cash-transfers" target="_blank" rel="noreferrer">
+          <span>WFP · 2025</span><div><strong>US$2B</strong><small>cash-based transfers</small></div><div><strong>US$170M</strong><small>commodity vouchers</small></div><div><strong>5.9M</strong><small>people reached with vouchers</small></div><b>Explore WFP cash transfers ↗</b>
+        </a>
       </section>
 
       <section className="events-section" id="events">
@@ -316,6 +457,7 @@ export default function Home() {
           <div><p className="kicker">What’s next</p><h2>Meet the ideas.<br/><em>Meet the people.</em></h2></div>
           <p>Join conversations advancing cash practice across humanitarian response, anticipatory action, localisation, and inclusion.</p>
         </div>
+        <a className="nepal-event-banner" href="https://www.calpnetwork.org/event/calp-core-cva-skills-for-programme-staff-course-in-the-nepal/" target="_blank" rel="noreferrer"><span><i /> Happening now · Kathmandu</span><b>CALP Core CVA Skills for Programme Staff</b><small>24–28 August 2026 · CALP Network, British Red Cross, Nepal Red Cross Society & Aria Technologies</small><strong>View course ↗</strong></a>
         <div className="event-layout">
           <article className="date-card"><span>OCT</span><strong>28</strong><small>→ 30 · 2026</small></article>
           <article className="event-card">
