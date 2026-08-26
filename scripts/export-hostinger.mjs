@@ -60,7 +60,8 @@ await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });
 await cp(path.join(root, "dist", "client"), output, { recursive: true });
 
-const server = spawn("npm", ["run", "start", "--", "--port", String(port)], {
+const vinextExecutable = path.join(root, "node_modules", ".bin", process.platform === "win32" ? "vinext.cmd" : "vinext");
+const server = spawn(vinextExecutable, ["start", "--port", String(port)], {
   cwd: root,
   env: process.env,
   stdio: ["ignore", "pipe", "pipe"],
