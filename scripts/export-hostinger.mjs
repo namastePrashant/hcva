@@ -9,7 +9,7 @@ const origin = `http://127.0.0.1:${port}`;
 const publicOrigin = (process.env.HCVA_PUBLIC_ORIGIN || "https://humanitariancva.org").replace(/\/$/, "");
 
 const routes = [
-  "/", "/services", "/lali360", "/learning", "/insights", "/events", "/opportunities", "/about",
+  "/", "/services", "/lali360", "/learning", "/insights", "/events", "/opportunities", "/5w1h", "/about",
   "/insights/nepal-digital-payments-humanitarian-cash",
   "/insights/cash-readiness-beyond-a-checklist",
   "/insights/responsible-data-cva-digital-systems",
@@ -40,9 +40,12 @@ document.addEventListener("DOMContentLoaded",function(){
 
   var mobileButton=document.querySelector(".mobile-toggle");
   var mobileMenu=document.querySelector(".mobile-menu");
-  if(mobileButton&&mobileMenu){mobileButton.addEventListener("click",function(){
-    var open=mobileMenu.classList.toggle("open");mobileButton.textContent=open?"Close":"Menu";mobileButton.setAttribute("aria-expanded",String(open));
-  });}
+  if(mobileButton&&mobileMenu){
+    function setMobile(open){mobileMenu.classList.toggle("open",open);mobileButton.textContent=open?"Close":"Menu";mobileButton.setAttribute("aria-expanded",String(open));document.body.classList.toggle("menu-open",open);}
+    mobileButton.addEventListener("click",function(){setMobile(!mobileMenu.classList.contains("open"));});
+    mobileMenu.querySelectorAll("a").forEach(function(link){link.addEventListener("click",function(){setMobile(false);});});
+    document.addEventListener("keydown",function(event){if(event.key==="Escape")setMobile(false);});
+  }
 
   var grid=document.querySelector(".resource-grid");
   var cards=grid?Array.from(grid.querySelectorAll(".resource-card")):[];
@@ -64,6 +67,38 @@ document.addEventListener("DOMContentLoaded",function(){
   document.querySelectorAll(".ask-button,.omni-cta,.omni-fab").forEach(function(button){button.addEventListener("click",openOmni);});
   var closeOmni=document.querySelector(".omni-panel-head button");
   closeOmni&&closeOmni.addEventListener("click",function(){omniPanel&&omniPanel.classList.remove("open");});
+
+  var fivew=document.querySelector(".fivew-app");
+  if(fivew){
+    var fivewRows=Array.from(fivew.querySelectorAll("tbody tr"));
+    var fivewFilters=Array.from(fivew.querySelectorAll("[data-fivew-filter]"));
+    var fivewSearch=fivew.querySelector("[data-fivew-search]");
+    function filterFivew(){
+      var visible=[];
+      fivewRows.forEach(function(row){
+        var match=fivewFilters.every(function(field){var value=field.value;return value==="All"||row.dataset[field.dataset.fivewFilter]===value;});
+        var query=fivewSearch?fivewSearch.value.trim().toLowerCase():"";
+        match=match&&(!query||row.textContent.toLowerCase().includes(query));row.hidden=!match;if(match)visible.push(row);
+      });
+      function stat(name,value){var node=fivew.querySelector('[data-fivew-stat="'+name+'"]');if(node)node.textContent=value;}
+      stat("activities",visible.length);
+      stat("organizations",new Set(visible.map(function(row){return row.dataset.organization;})).size);
+      stat("districts",new Set(visible.map(function(row){return row.dataset.district;})).size);
+      stat("target",visible.reduce(function(sum,row){return sum+Number(row.dataset.target||0);},0).toLocaleString("en-US"));
+    }
+    fivewFilters.forEach(function(field){field.addEventListener("change",filterFivew);});
+    fivewSearch&&fivewSearch.addEventListener("input",filterFivew);
+    var clearFivew=fivew.querySelector("[data-fivew-clear]");
+    clearFivew&&clearFivew.addEventListener("click",function(){fivewFilters.forEach(function(field){field.value="All";});if(fivewSearch)fivewSearch.value="";filterFivew();});
+    fivew.querySelectorAll("[data-fivew-tab]").forEach(function(button){button.addEventListener("click",function(){var tab=button.dataset.fivewTab;fivew.querySelectorAll("[data-fivew-tab]").forEach(function(item){item.classList.toggle("active",item.dataset.fivewTab===tab);});fivew.querySelectorAll("[data-fivew-panel]").forEach(function(panel){panel.hidden=panel.dataset.fivewPanel!==tab;});});});
+    var drawer=fivew.querySelector(".fivew-drawer");var backdrop=fivew.querySelector(".fivew-backdrop");
+    function setDrawer(open){drawer&&drawer.classList.toggle("open",open);if(backdrop)backdrop.hidden=!open;}
+    fivew.querySelectorAll("[data-fivew-add]").forEach(function(button){button.addEventListener("click",function(){setDrawer(true);});});
+    fivew.querySelectorAll("[data-fivew-close]").forEach(function(button){button.addEventListener("click",function(){setDrawer(false);});});
+    var drawerForm=fivew.querySelector(".fivew-drawer form");drawerForm&&drawerForm.addEventListener("submit",function(event){event.preventDefault();setDrawer(false);});
+    var downloadFivew=fivew.querySelector("[data-fivew-download]");
+    downloadFivew&&downloadFivew.addEventListener("click",function(){var lines=[["Who","What","Where","When","Why","How","Target","Status"]];fivewRows.filter(function(row){return !row.hidden;}).forEach(function(row){lines.push(Array.from(row.cells).map(function(cell){return cell.innerText.replace(/\\s+/g," ").trim();}));});var csv=lines.map(function(line){return line.map(function(value){return '"'+String(value).replaceAll('"','""')+'"';}).join(",");}).join("\\n");var url=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));var link=document.createElement("a");link.href=url;link.download="hcva-5w1h-sample.csv";link.click();URL.revokeObjectURL(url);});
+  }
 });
 </script>`;
 

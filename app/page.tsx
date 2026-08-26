@@ -305,7 +305,7 @@ export default function Home() {
         <a href="#services"><span>01</span><b>Advise</b><small>CVA consulting & digital strategy</small><i>↘</i></a>
         <a href="#lali360"><span>02</span><b>Digitise</b><small>Lali360 project-cycle tools</small><i>↘</i></a>
         <a href="#learn"><span>03</span><b>Strengthen</b><small>Learning, guidance & knowledge</small><i>↘</i></a>
-        <a href="#five-w"><span>04</span><b>Coordinate</b><small>5W matrix · coming soon</small><i>↘</i></a>
+        <a href="/5w1h"><span>04</span><b>Coordinate</b><small>Explore the 5W1H response tool</small><i>↗</i></a>
       </section>
 
       <section className="services-section" id="services">
@@ -463,11 +463,11 @@ export default function Home() {
       </section>
 
       <section className="omni-section" id="omni">
-        <div className="omni-orbit"><span>OMNI</span><i /><i /><i /></div>
         <div className="omni-copy">
-          <p className="kicker">Your CVA guide</p>
-          <h2>Ask a better question.<br/><em>Find a useful next step.</em></h2>
-          <p>Omni helps you navigate the curated Humanitarian CVA library—from “where do I start?” to the right toolkit for your programme.</p>
+          <p className="kicker">Omni · Your CVA navigator</p>
+          <h2>From a question<br/><em>to a practical next step.</em></h2>
+          <p>Omni helps practitioners move through the Humanitarian CVA knowledge base—finding relevant learning, operational guidance, events, opportunities, and services without searching across dozens of sources.</p>
+          <div className="omni-proof"><span><b>19</b> curated resources</span><span><b>6</b> practice pathways</span><span><b>1</b> focused answer</span></div>
           <div className="prompt-row">
             <button onClick={() => { setOmniOpen(true); askOmni("I’m new to CVA. Where should I begin?"); }}>I’m new to CVA</button>
             <button onClick={() => { setOmniOpen(true); askOmni("Help me learn market analysis"); }}>Learn market analysis</button>
@@ -475,6 +475,15 @@ export default function Home() {
             <button onClick={() => { setOmniOpen(true); askOmni("Tell me about your digital services and Lali360"); }}>Explore our services</button>
           </div>
           <button className="primary-cta omni-cta" onClick={() => setOmniOpen(true)}>Start a conversation <span>→</span></button>
+        </div>
+        <div className="omni-demo" aria-label="Example Omni conversation">
+          <div className="omni-demo-head"><span>✦</span><div><b>Omni</b><small><i/> HCVA knowledge guide</small></div><em>CURATED</em></div>
+          <div className="omni-demo-body">
+            <p className="demo-question">I’m planning a cash response. What should I check first?</p>
+            <div className="demo-answer"><span>✦</span><div><p>Start with three decisions: feasibility, market functionality, and delivery readiness. I can guide you through each one.</p><div><button onClick={() => { setOmniOpen(true); askOmni("I’m new to CVA. Where should I begin?"); }}>CVA fundamentals ↗</button><button onClick={() => { setOmniOpen(true); askOmni("Help me learn market analysis"); }}>Market analysis ↗</button></div></div></div>
+            <div className="omni-source-line"><span>Answer grounded in</span><b>CALP</b><b>Kaya</b><b>Cash Hub</b></div>
+          </div>
+          <button className="omni-demo-input" onClick={() => setOmniOpen(true)}><span>Ask Omni about humanitarian cash…</span><b>↑</b></button>
         </div>
       </section>
 
@@ -492,18 +501,18 @@ export default function Home() {
       </section>
 
       <section className="five-w-section" id="five-w">
-        <div><span className="mini-label">Next on the roadmap</span><h2>Who is doing what,<br/>where, when—and for whom?</h2></div>
+        <div><span className="mini-label">Explore the coordination tool</span><h2>Who is doing what,<br/>where, when, why—and how?</h2><a className="fivew-home-cta" href="/5w1h">Open the 5W1H workspace <span>→</span></a></div>
         <div className="matrix-preview" aria-label="5W matrix preview">
           <span>WHO</span><span>WHAT</span><span>WHERE</span><span>WHEN</span><span>WHOM</span>
           <i /><i /><i /><i /><i /><i /><i /><i /><i /><i />
         </div>
-        <p>The 5W matrix will turn fragmented response data into a coordinated view of CVA activity. Scope, data model, and access will be shaped with field users next.</p>
+        <p>Explore a working prototype that turns fragmented response records into a filterable coordination view. The current figures are sample Nepal data for product demonstration.</p>
       </section>
 
       <footer>
         <a className="brand hcva-brand footer-brand" href="/"><img src="/hcva-logo.jpeg" alt="HCVA — Humanitarian Cash and Voucher Assistance" /></a>
         <p><strong>humanitariancva.org</strong><span>An Aria Technologies initiative for CVA digital services, tools, and knowledge.</span></p>
-        <div><a href="/services">Services</a><a href="/lali360">Lali360</a><a href="/learning">Learn</a><a href="/insights">Insights</a><a href="/about">About</a></div>
+        <div><a href="/services">Services</a><a href="/lali360">Lali360</a><a href="/learning">Learn</a><a href="/insights">Insights</a><a href="/5w1h">5W1H</a><a href="/about">About</a></div>
         <small>© 2026 Humanitarian CVA · Aria Technologies · humanitariancva.org · humanitariancva.com · Source records remain the property of their publishers.</small>
       </footer>
 
