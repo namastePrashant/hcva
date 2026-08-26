@@ -16,7 +16,7 @@ const routes = [
   "/insights/anticipatory-action-cash-design-questions",
 ];
 
-const forceDocumentNavigation = `<script data-hostinger-static-navigation>
+const staticEnhancements = `<script data-hostinger-static>
 document.addEventListener("click",function(event){
   var anchor=event.target.closest&&event.target.closest("a");
   if(!anchor||anchor.target||anchor.hasAttribute("download"))return;
@@ -25,6 +25,46 @@ document.addEventListener("click",function(event){
     event.preventDefault();event.stopImmediatePropagation();location.assign(url.href);
   }
 },true);
+
+document.addEventListener("DOMContentLoaded",function(){
+  var mega=document.querySelector(".mega-menu");
+  var megaButton=document.querySelector(".mega-trigger");
+  var header=document.querySelector(".site-header");
+  if(mega&&megaButton){
+    function setMega(open){mega.classList.toggle("open",open);megaButton.setAttribute("aria-expanded",String(open));}
+    megaButton.addEventListener("click",function(){setMega(!mega.classList.contains("open"));});
+    megaButton.addEventListener("mouseenter",function(){setMega(true);});
+    megaButton.addEventListener("focus",function(){setMega(true);});
+    header&&header.addEventListener("mouseleave",function(){setMega(false);});
+  }
+
+  var mobileButton=document.querySelector(".mobile-toggle");
+  var mobileMenu=document.querySelector(".mobile-menu");
+  if(mobileButton&&mobileMenu){mobileButton.addEventListener("click",function(){
+    var open=mobileMenu.classList.toggle("open");mobileButton.textContent=open?"Close":"Menu";mobileButton.setAttribute("aria-expanded",String(open));
+  });}
+
+  var grid=document.querySelector(".resource-grid");
+  var cards=grid?Array.from(grid.querySelectorAll(".resource-card")):[];
+  var search=document.querySelector(".search-box input");
+  var filters=Array.from(document.querySelectorAll(".topic-filter button"));
+  var loadMore=document.querySelector(".load-more");
+  var selectedTopic="All";
+  function filterResources(){
+    var query=search?search.value.trim().toLowerCase():"";
+    cards.forEach(function(card){var matchesTopic=selectedTopic==="All"||card.dataset.topic===selectedTopic;var matchesSearch=!query||(card.dataset.search||"").includes(query);card.hidden=!(matchesTopic&&matchesSearch);});
+    grid&&grid.classList.toggle("show-all",Boolean(query)||selectedTopic!=="All"||(loadMore&&loadMore.dataset.expanded==="true"));
+  }
+  search&&search.addEventListener("input",filterResources);
+  filters.forEach(function(button){button.addEventListener("click",function(){selectedTopic=button.textContent.trim();filters.forEach(function(item){item.classList.toggle("active",item===button);});filterResources();});});
+  loadMore&&loadMore.addEventListener("click",function(){var expanded=loadMore.dataset.expanded!=="true";loadMore.dataset.expanded=String(expanded);loadMore.innerHTML=expanded?'Show fewer resources <span>↑</span>':'View all resources <span>↓</span>';filterResources();});
+
+  var omniPanel=document.querySelector(".omni-panel");
+  function openOmni(){omniPanel&&omniPanel.classList.add("open");}
+  document.querySelectorAll(".ask-button,.omni-cta,.omni-fab").forEach(function(button){button.addEventListener("click",openOmni);});
+  var closeOmni=document.querySelector(".omni-panel-head button");
+  closeOmni&&closeOmni.addEventListener("click",function(){omniPanel&&omniPanel.classList.remove("open");});
+});
 </script>`;
 
 async function waitForServer() {
@@ -50,7 +90,9 @@ async function renderRoute(route) {
     const metadataTags = streamedMetadata.replace(/^<div hidden="">/, "").replace(/<\/div>$/, "");
     html = html.replace("</head>", `${metadataTags}</head>`);
   }
-  html = html.replace("</body>", `${forceDocumentNavigation}</body>`);
+  html = html.replace(/<script\b[\s\S]*?<\/script>/g, "");
+  html = html.replace(/<link\b[^>]*rel="modulepreload"[^>]*>/g, "");
+  html = html.replace("</body>", `${staticEnhancements}</body>`);
   const directory = route === "/" ? output : path.join(output, route.slice(1));
   await mkdir(directory, { recursive: true });
   await writeFile(path.join(directory, "index.html"), html);

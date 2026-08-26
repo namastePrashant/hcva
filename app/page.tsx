@@ -249,7 +249,7 @@ export default function Home() {
     });
   }, [query, topic]);
 
-  const visibleResources = showAll || query || topic !== "All" ? filtered : filtered.slice(0, 6);
+  const visibleResources = filtered;
 
   function askOmni(question: string) {
     const clean = question.trim();
@@ -378,9 +378,9 @@ export default function Home() {
           <span>Curated from trusted sector sources</span>
         </div>
 
-        <div className="resource-grid">
-          {visibleResources.map((resource, index) => (
-            <article className={`resource-card ${resource.featured ? "featured" : ""}`} key={resource.title}>
+          <div className={`resource-grid ${showAll || query || topic !== "All" ? "show-all" : ""}`}>
+            {visibleResources.map((resource, index) => (
+              <article className={`resource-card ${resource.featured ? "featured" : ""}`} key={resource.title} data-topic={resource.topic} data-search={`${resource.title} ${resource.provider} ${resource.format} ${resource.level} ${resource.topic} ${resource.description}`.toLowerCase()}>
               <div className="card-number">{String(index + 1).padStart(2, "0")}</div>
               <div className="card-meta"><span>{resource.level}</span><span>{resource.format}</span></div>
               <h3>{resource.title}</h3>
