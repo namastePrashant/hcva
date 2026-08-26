@@ -60,11 +60,6 @@ nav a:hover::after, nav a:focus-visible::after { right: 0; }
 .mega-feature i { position: absolute; right: 20px; top: 20px; color: var(--lime); font-style: normal; }
 .mobile-menu { display: none; }
 
-.internal-header { position: sticky; }
-.internal-header .desktop-nav { gap: 23px; }
-.internal-mobile { padding: 18px 5.5vw 26px; position: absolute; top: 100%; left: 0; right: 0; display: grid; gap: 0; background: white; border-bottom: 1px solid var(--line); box-shadow: 0 18px 40px rgba(29,26,24,.12); }
-.internal-mobile a { padding: 12px 0; border-bottom: 1px solid var(--line); }
-
 .internal-page, .insights-page, .article-page { min-height: 70vh; }
 .internal-hero { min-height: 510px; padding: 105px 8vw 80px; display: flex; flex-direction: column; justify-content: center; background: var(--paper); border-bottom: 1px solid var(--line); }
 .internal-hero h1 { max-width: 1050px; margin: 18px 0 25px; font-size: clamp(48px, 6vw, 86px); }
