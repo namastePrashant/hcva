@@ -96,6 +96,31 @@ Options -Indexes
   AddType text/css .css
 </IfModule>
 `);
+
+  await writeFile(path.join(output, "package.json"), JSON.stringify({
+    name: "hcva-hostinger-static",
+    version: "1.0.0",
+    private: true,
+    engines: { node: ">=22" },
+    scripts: { build: "node build-static.mjs" },
+    devDependencies: { vite: "^6.0.0" },
+  }, null, 2) + "\n");
+
+  await writeFile(path.join(output, "build-static.mjs"), `import { cp, mkdir, readdir, rm } from "node:fs/promises";
+import path from "node:path";
+
+const root = process.cwd();
+const destination = path.join(root, "dist");
+const excluded = new Set([".git", "dist", "package.json", "package-lock.json", "build-static.mjs"]);
+
+await rm(destination, { recursive: true, force: true });
+await mkdir(destination, { recursive: true });
+for (const entry of await readdir(root)) {
+  if (excluded.has(entry)) continue;
+  await cp(path.join(root, entry), path.join(destination, entry), { recursive: true });
+}
+console.log("Hostinger static output created in dist");
+`);
   console.log(`Hostinger files created in ${output}`);
 } catch (error) {
   console.error(serverLog);

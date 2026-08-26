@@ -38,4 +38,13 @@ The repository includes a generated `hostinger-static` branch. In Hostinger's Gi
 - Branch: `hostinger-static`
 - Install path: leave it empty so Hostinger deploys directly to `/public_html`
 
+For Hostinger's **Deploy Web App** settings use:
+
+- Framework preset: `Vite`
+- Branch: `hostinger-static`
+- Node version: `22.x`
+- Build command: `npm run build`
+- Package manager: `npm`
+- Output directory: `dist`
+
 The GitHub workflow rebuilds and replaces this deployment branch whenever `main` changes. In Hostinger, enable Auto Deployment for the `hostinger-static` branch if you want new pushes to publish automatically.
