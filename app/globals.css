@@ -366,6 +366,7 @@ h1 em, .section-heading h2 em, .omni-copy h2 em { color: var(--coral); font-weig
 /* 5W1H coordination workspace */
 .fivew-page { background: #f6f8fc; color: #14213d; }
 .fivew-app { min-height: calc(100vh - 82px); position: relative; display: grid; grid-template-columns: 185px minmax(0,1fr); font-family: Arial,Helvetica,sans-serif; }
+.fivew-app.showcase-only { display: block; }
 .fivew-rail { padding: 28px 15px; display: flex; flex-direction: column; gap: 7px; border-right: 1px solid #e2e8f2; background: white; }
 .fivew-rail > div { margin: 0 8px 21px; display: flex; flex-direction: column; gap: 4px; }
 .fivew-rail > div span { color: #1768e5; font-size: 11px; font-weight: 900; letter-spacing: 1px; }
@@ -375,6 +376,7 @@ h1 em, .section-heading h2 em, .omni-copy h2 em { color: var(--coral); font-weig
 .fivew-rail b { width: 17px; color: #1768e5; font-size: 15px; text-align: center; }
 .fivew-rail small { margin-top: auto; padding: 15px; border-radius: 7px; background: #f4f7fc; color: #7a879e; font-size: 9px; line-height: 1.6; }
 .fivew-workspace { min-width: 0; padding: 34px 2.7vw 46px; }
+.showcase-only .fivew-workspace { width: 100%; max-width: 1600px; margin: 0 auto; padding: 40px 5.5vw 70px; }
 .fivew-introduction { min-height:560px;padding:58px 4vw;display:grid;grid-template-columns:1.1fr .9fr;gap:7vw;align-items:center;border:1px solid #e0e6f0;border-radius:14px;background:linear-gradient(135deg,#fff 0%,#f8faff 62%,#eef4ff 100%);box-shadow:0 18px 55px rgba(33,63,111,.07); }
 .fivew-intro-copy > p { margin:0;color:#1768e5;font-size:9px;font-weight:900;letter-spacing:1px;text-transform:uppercase; }
 .fivew-intro-copy h1 { max-width:760px;margin:18px 0 24px;font:400 clamp(48px,5.4vw,79px)/.94 Georgia,serif;letter-spacing:-3px;color:#14213d; }
@@ -707,6 +709,7 @@ footer > small { grid-column: 1 / -1; padding-top: 28px; border-top: 1px solid r
   .omni-panel { right: 14px; bottom: 70px; }
   .fivew-rail { top: 70px; padding-left: 20px; }
   .fivew-workspace { padding: 26px 20px 38px; }
+  .showcase-only .fivew-workspace { padding: 26px 20px 44px; }
   .fivew-titlebar { flex-direction: column; }
   .fivew-titlebar h1,.fivew-titlebar h2 { font-size: 36px; }
   .mobile-break { display: block; }
