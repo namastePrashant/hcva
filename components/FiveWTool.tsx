@@ -86,6 +86,30 @@ export default function FiveWTool() {
         <div className="fivew-actions"><button data-fivew-download onClick={downloadCsv}>↓ Download CSV</button><button data-fivew-add className="primary" onClick={() => setShowForm(true)}>＋ Add activity</button></div>
       </header>
 
+      <section className="fivew-live-stage" aria-label="Live coordination activity preview">
+        <div className="live-stage-bar"><span><i/> Live coordination pulse</span><b>Sample stream · Nepal</b><em>Auto-updating</em></div>
+        <div className="live-stage-body">
+          <div className="live-network" aria-hidden="true">
+            <div className="network-grid"/>
+            <i className="route route-one"/><i className="route route-two"/><i className="route route-three"/>
+            <span className="network-node node-one"><b>WHO</b><small>Partners</small></span>
+            <span className="network-node node-two"><b>WHERE</b><small>Districts</small></span>
+            <span className="network-node node-three"><b>HOW</b><small>Modalities</small></span>
+            <span className="network-core"><i>5W1H</i><b>Coordination intelligence</b><small>Signals becoming decisions</small></span>
+            <i className="data-packet packet-one"/><i className="data-packet packet-two"/><i className="data-packet packet-three"/>
+          </div>
+          <div className="live-feed">
+            <div className="live-feed-title"><span>Incoming activity records</span><b>● LIVE</b></div>
+            <div className="signal-stack">
+              <article className="signal-record signal-one"><div><span>01 · ACTIVE RESPONSE</span><b>Just received</b></div><h3>Multipurpose Cash Assistance</h3><p>Nepal Red Cross · Jajarkot, Karnali</p><footer><span>2,500 households</span><strong>Bank transfer</strong></footer></article>
+              <article className="signal-record signal-two"><div><span>02 · PREPAREDNESS</span><b>Validated</b></div><h3>Cash Preparedness</h3><p>Aria Technologies · Kailali, Sudurpashchim</p><footer><span>1,200 households</span><strong>Digital readiness</strong></footer></article>
+              <article className="signal-record signal-three"><div><span>03 · ACTIVE RESPONSE</span><b>Mapped</b></div><h3>Emergency Cash for Children</h3><p>UNICEF · Banke, Lumbini</p><footer><span>5,600 households</span><strong>Mobile money</strong></footer></article>
+            </div>
+            <div className="live-progress"><i/><span>Records are illustrative and rotate automatically</span></div>
+          </div>
+        </div>
+      </section>
+
       <section className="fivew-stats" aria-label="Coordination summary">
         <article><i className="violet">◎</i><div><strong data-fivew-stat="organizations">{new Set(filtered.map(item => item.organization)).size}</strong><span>Organizations</span></div></article>
         <article><i className="green">▤</i><div><strong data-fivew-stat="activities">{filtered.length}</strong><span>Activities</span></div></article>
@@ -117,6 +141,26 @@ export default function FiveWTool() {
           <div className="coordination-alert"><span>△ Coordination signal</span><p>Use filters to compare reported coverage. Figures are sample data for product demonstration.</p></div>
         </aside>
       </div>
+
+      <section className="fivew-explainer">
+        <header><div><span>Common coordination language</span><h2>Six questions. One operational picture.</h2></div><p>5W1H turns disconnected partner updates into a shared view that coordinators can filter, compare, validate and act on.</p></header>
+        <div className="fivew-question-grid">
+          <article><span>01</span><b>WHO</b><h3>Which organisation?</h3><p>Lead agency, implementing partner, focal point and coordination relationship.</p></article>
+          <article><span>02</span><b>WHAT</b><h3>Which activity?</h3><p>Assistance type, intervention, sector objective and intended result.</p></article>
+          <article><span>03</span><b>WHERE</b><h3>Which location?</h3><p>Province, district, municipality and the operational coverage area.</p></article>
+          <article><span>04</span><b>WHEN</b><h3>Which phase and date?</h3><p>Preparedness, active response, recovery, start date and delivery period.</p></article>
+          <article><span>05</span><b>WHY</b><h3>Which need?</h3><p>Evidence, response rationale, targeting logic and expected outcome.</p></article>
+          <article><span>06</span><b>HOW</b><h3>Which modality?</h3><p>Cash, voucher, payment channel, financial service provider and resources.</p></article>
+        </div>
+      </section>
+
+      <section className="fivew-decision-strip">
+        <div><span>From reporting to decisions</span><h2>See overlap early.<br/>Find gaps faster.</h2></div>
+        <article><b>01</b><h3>Coordinate</h3><p>Compare partner plans before activities duplicate effort or leave communities behind.</p></article>
+        <article><b>02</b><h3>Prioritise</h3><p>Connect household targets, operational phases and geographic reach in one view.</p></article>
+        <article><b>03</b><h3>Communicate</h3><p>Export a clean matrix for working groups, authorities, partners and donors.</p></article>
+      </section>
+      <p className="fivew-data-note"><b>Prototype note</b> All records shown here are sample data designed to demonstrate the product experience. A production deployment would use agreed access controls, validation rules, data responsibility standards and partner-owned records.</p>
     </div>
 
     <div className={`fivew-drawer ${showForm ? "open" : ""}`} aria-hidden={!showForm}>
