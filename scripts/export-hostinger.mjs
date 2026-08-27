@@ -91,6 +91,7 @@ document.addEventListener("DOMContentLoaded",function(){
     var clearFivew=fivew.querySelector("[data-fivew-clear]");
     clearFivew&&clearFivew.addEventListener("click",function(){fivewFilters.forEach(function(field){field.value="All";});if(fivewSearch)fivewSearch.value="";filterFivew();});
     fivew.querySelectorAll("[data-fivew-tab]").forEach(function(button){button.addEventListener("click",function(){var tab=button.dataset.fivewTab;fivew.querySelectorAll("[data-fivew-tab]").forEach(function(item){item.classList.toggle("active",item.dataset.fivewTab===tab);});fivew.querySelectorAll("[data-fivew-panel]").forEach(function(panel){panel.hidden=panel.dataset.fivewPanel!==tab;});});});
+    fivew.querySelectorAll("[data-fivew-showcase]").forEach(function(button){button.addEventListener("click",function(){var view=button.dataset.fivewShowcase;fivew.querySelectorAll("[data-fivew-showcase]").forEach(function(item){var active=item.dataset.fivewShowcase===view;item.classList.toggle("active",active);item.setAttribute("aria-pressed",String(active));});fivew.querySelectorAll("[data-fivew-showcase-panel]").forEach(function(panel){panel.hidden=panel.dataset.fivewShowcasePanel!==view;});});});
     var drawer=fivew.querySelector(".fivew-drawer");var backdrop=fivew.querySelector(".fivew-backdrop");
     function setDrawer(open){drawer&&drawer.classList.toggle("open",open);if(backdrop)backdrop.hidden=!open;}
     fivew.querySelectorAll("[data-fivew-add]").forEach(function(button){button.addEventListener("click",function(){setDrawer(true);});});

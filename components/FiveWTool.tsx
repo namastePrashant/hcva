@@ -42,6 +42,7 @@ export default function FiveWTool() {
   const [status, setStatus] = useState("All");
   const [query, setQuery] = useState("");
   const [tab, setTab] = useState<"matrix" | "coverage" | "gaps">("matrix");
+  const [showcase, setShowcase] = useState<"pulse" | "coverage" | "gaps">("pulse");
   const [showForm, setShowForm] = useState(false);
 
   const districts = useMemo(() => ["All", ...Array.from(new Set(activities.filter(item => province === "All" || item.province === province).map(item => item.district)))], [province]);
@@ -81,34 +82,41 @@ export default function FiveWTool() {
     </aside>
 
     <div className="fivew-workspace">
-      <header className="fivew-titlebar">
-        <div><p>Planning & coordination tool</p><h1>5W1H Cash Preparedness<br className="mobile-break"/> &amp; Response</h1><span>See who is doing what, where, when, why and how.</span></div>
-        <div className="fivew-actions"><button data-fivew-download onClick={downloadCsv}>↓ Download CSV</button><button data-fivew-add className="primary" onClick={() => setShowForm(true)}>＋ Add activity</button></div>
-      </header>
+      <section className="fivew-introduction">
+        <div className="fivew-intro-copy"><p>5W1H coordination system</p><h1>Turn response updates into a shared operational picture.</h1><span>Humanitarian cash responses move quickly. The 5W1H tool brings partner activities, locations, timelines, objectives, modalities and household reach into one structured view—so teams can coordinate with confidence.</span><div><a href="#showcase">See the product in motion <b>↓</b></a><a href="#workspace">Explore sample data <b>↘</b></a></div></div>
+        <aside className="fivew-intro-card"><header><span>One shared picture</span><b>NEPAL · SAMPLE VIEW</b></header><div><article><strong>WHO</strong><span>8 organisations</span></article><article><strong>WHAT</strong><span>8 activities</span></article><article><strong>WHERE</strong><span>8 districts</span></article><article><strong>WHEN</strong><span>3 response phases</span></article><article><strong>WHY</strong><span>Needs and outcomes</span></article><article><strong>HOW</strong><span>3 delivery approaches</span></article></div><footer><i/><span>Structured for coordination, not just reporting</span></footer></aside>
+      </section>
 
-      <section className="fivew-live-stage" aria-label="Live coordination activity preview">
-        <div className="live-stage-bar"><span><i/> Live coordination pulse</span><b>Sample stream · Nepal</b><em>Auto-updating</em></div>
-        <div className="live-stage-body">
-          <div className="live-network" aria-hidden="true">
-            <div className="network-grid"/>
-            <i className="route route-one"/><i className="route route-two"/><i className="route route-three"/>
-            <span className="network-node node-one"><b>WHO</b><small>Partners</small></span>
-            <span className="network-node node-two"><b>WHERE</b><small>Districts</small></span>
-            <span className="network-node node-three"><b>HOW</b><small>Modalities</small></span>
-            <span className="network-core"><i>5W1H</i><b>Coordination intelligence</b><small>Signals becoming decisions</small></span>
-            <i className="data-packet packet-one"/><i className="data-packet packet-two"/><i className="data-packet packet-three"/>
-          </div>
-          <div className="live-feed">
-            <div className="live-feed-title"><span>Incoming activity records</span><b>● LIVE</b></div>
-            <div className="signal-stack">
-              <article className="signal-record signal-one"><div><span>01 · ACTIVE RESPONSE</span><b>Just received</b></div><h3>Multipurpose Cash Assistance</h3><p>Nepal Red Cross · Jajarkot, Karnali</p><footer><span>2,500 households</span><strong>Bank transfer</strong></footer></article>
-              <article className="signal-record signal-two"><div><span>02 · PREPAREDNESS</span><b>Validated</b></div><h3>Cash Preparedness</h3><p>Aria Technologies · Kailali, Sudurpashchim</p><footer><span>1,200 households</span><strong>Digital readiness</strong></footer></article>
-              <article className="signal-record signal-three"><div><span>03 · ACTIVE RESPONSE</span><b>Mapped</b></div><h3>Emergency Cash for Children</h3><p>UNICEF · Banke, Lumbini</p><footer><span>5,600 households</span><strong>Mobile money</strong></footer></article>
+      <section className="fivew-showcase" id="showcase">
+        <header><div><span>See it working</span><h2>One tool. Three coordination views.</h2></div><p>Choose a view to understand how 5W1H turns incoming partner records into useful operational intelligence.</p></header>
+        <div className="showcase-layout">
+          <nav className="showcase-menu" aria-label="5W1H product views">
+            <button data-fivew-showcase="pulse" className={showcase === "pulse" ? "active" : ""} aria-pressed={showcase === "pulse"} onClick={() => setShowcase("pulse")}><span>01</span><div><b>Live coordination pulse</b><p>Watch new activity records connect partners, locations and delivery approaches.</p></div><i>→</i></button>
+            <button data-fivew-showcase="coverage" className={showcase === "coverage" ? "active" : ""} aria-pressed={showcase === "coverage"} onClick={() => setShowcase("coverage")}><span>02</span><div><b>Coverage intelligence</b><p>Compare geographic reach and household targets across provinces.</p></div><i>→</i></button>
+            <button data-fivew-showcase="gaps" className={showcase === "gaps" ? "active" : ""} aria-pressed={showcase === "gaps"} onClick={() => setShowcase("gaps")}><span>03</span><div><b>Gap and overlap signals</b><p>Surface possible duplication, thin coverage and incomplete records.</p></div><i>→</i></button>
+          </nav>
+          <div className="showcase-screen">
+            <div data-fivew-showcase-panel="pulse" hidden={showcase !== "pulse"} className="fivew-live-stage">
+              <div className="live-stage-bar"><span><i/> Live coordination pulse</span><b>Sample stream · Nepal</b><em>Auto-updating</em></div>
+              <div className="live-stage-body">
+                <div className="live-network" aria-hidden="true"><div className="network-grid"/><i className="route route-one"/><i className="route route-two"/><i className="route route-three"/><span className="network-node node-one"><b>WHO</b><small>Partners</small></span><span className="network-node node-two"><b>WHERE</b><small>Districts</small></span><span className="network-node node-three"><b>HOW</b><small>Modalities</small></span><span className="network-core"><i>5W1H</i><b>Coordination intelligence</b><small>Signals becoming decisions</small></span><i className="data-packet packet-one"/><i className="data-packet packet-two"/><i className="data-packet packet-three"/></div>
+                <div className="live-feed"><div className="live-feed-title"><span>Incoming activity records</span><b>● LIVE</b></div><div className="signal-stack"><article className="signal-record signal-one"><div><span>01 · ACTIVE RESPONSE</span><b>Just received</b></div><h3>Multipurpose Cash Assistance</h3><p>Nepal Red Cross · Jajarkot, Karnali</p><footer><span>2,500 households</span><strong>Bank transfer</strong></footer></article><article className="signal-record signal-two"><div><span>02 · PREPAREDNESS</span><b>Validated</b></div><h3>Cash Preparedness</h3><p>Aria Technologies · Kailali, Sudurpashchim</p><footer><span>1,200 households</span><strong>Digital readiness</strong></footer></article><article className="signal-record signal-three"><div><span>03 · ACTIVE RESPONSE</span><b>Mapped</b></div><h3>Emergency Cash for Children</h3><p>UNICEF · Banke, Lumbini</p><footer><span>5,600 households</span><strong>Mobile money</strong></footer></article></div><div className="live-progress"><i/><span>Records rotate automatically</span></div></div>
+              </div>
             </div>
-            <div className="live-progress"><i/><span>Records are illustrative and rotate automatically</span></div>
+            <div data-fivew-showcase-panel="coverage" hidden={showcase !== "coverage"} className="showcase-coverage">
+              <div className="showcase-window-bar"><span><i/><i/><i/></span><b>Coverage intelligence</b><em>2026</em></div><div className="showcase-coverage-body"><div className="coverage-visual"><span className="coverage-shape shape-one"/><span className="coverage-shape shape-two"/><span className="coverage-shape shape-three"/><span className="coverage-shape shape-four"/><i className="coverage-pin pin-one">2</i><i className="coverage-pin pin-two">1</i><i className="coverage-pin pin-three">3</i><i className="coverage-pin pin-four">2</i><b>Reported activities by province</b></div><div className="coverage-ranking"><span>Household reach</span><strong>20,650</strong><small>across the sample portfolio</small>{["Karnali","Lumbini","Madhesh","Bagmati"].map((name,index) => <div key={name}><span>{name}</span><i><b style={{width:`${92-index*16}%`}}/></i><em>{[6700,5600,3000,1800][index].toLocaleString()}</em></div>)}</div></div>
+            </div>
+            <div data-fivew-showcase-panel="gaps" hidden={showcase !== "gaps"} className="showcase-gaps">
+              <div className="showcase-window-bar"><span><i/><i/><i/></span><b>Coordination signal monitor</b><em>3 signals</em></div><div className="showcase-gap-body"><div className="signal-radar"><i/><i/><i/><span>5W1H</span></div><div className="signal-alerts"><article><span>Coverage gap</span><b>Thin activity coverage in two provinces</b><p>Confirm whether the gap is operational or caused by incomplete reporting.</p></article><article><span>Potential overlap</span><b>Two activities share modality and geography</b><p>Validate targeting and partner coordination before the next transfer.</p></article><article><span>Data quality</span><b>Three records need partner details</b><p>Complete the HOW fields before publishing the coordination snapshot.</p></article></div></div>
+            </div>
           </div>
         </div>
       </section>
+
+      <header className="fivew-titlebar" id="workspace">
+        <div><p>Explore the working prototype</p><h2>5W1H Cash Preparedness &amp; Response Matrix</h2><span>Filter sample records, compare coverage and export a coordination-ready view.</span></div>
+        <div className="fivew-actions"><button data-fivew-download onClick={downloadCsv}>↓ Download CSV</button><button data-fivew-add className="primary" onClick={() => setShowForm(true)}>＋ Add activity</button></div>
+      </header>
 
       <section className="fivew-stats" aria-label="Coordination summary">
         <article><i className="violet">◎</i><div><strong data-fivew-stat="organizations">{new Set(filtered.map(item => item.organization)).size}</strong><span>Organizations</span></div></article>
