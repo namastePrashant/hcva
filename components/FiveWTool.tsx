@@ -38,23 +38,23 @@ export default function FiveWTool() {
           </nav>
 
           <div className="showcase-screen">
-            <div data-fivew-showcase-panel="pulse" hidden={showcase !== "pulse"} className="fivew-live-stage">
-              <div className="live-stage-bar"><span><i/> Coordination flow</span><b>Illustrative view</b><em>In motion</em></div>
-              <div className="live-stage-body">
-                <div className="live-network" aria-hidden="true"><div className="network-grid"/><i className="route route-one"/><i className="route route-two"/><i className="route route-three"/><span className="network-node node-one"><b>WHO</b><small>Partners</small></span><span className="network-node node-two"><b>WHERE</b><small>Coverage</small></span><span className="network-node node-three"><b>HOW</b><small>Delivery</small></span><span className="network-core"><i>5W1H</i><b>Shared understanding</b><small>Information becoming insight</small></span><i className="data-packet packet-one"/><i className="data-packet packet-two"/><i className="data-packet packet-three"/></div>
-                <div className="live-feed"><div className="live-feed-title"><span>Coordination information</span><b>● CONNECTED</b></div><div className="signal-stack"><article className="signal-record signal-one"><div><span>WHO + WHAT</span><b>Connected</b></div><h3>Partner activity understood</h3><p>Who is acting and what they intend to deliver.</p><footer><span>Clear ownership</span><strong>Shared view</strong></footer></article><article className="signal-record signal-two"><div><span>WHERE + WHEN</span><b>Aligned</b></div><h3>Coverage placed in context</h3><p>Where assistance is planned and when it is expected.</p><footer><span>Geographic context</span><strong>Timely decisions</strong></footer></article><article className="signal-record signal-three"><div><span>WHY + HOW</span><b>Interpreted</b></div><h3>Intent made visible</h3><p>Why assistance is needed and how it will be delivered.</p><footer><span>Response rationale</span><strong>Delivery clarity</strong></footer></article></div><div className="live-progress"><i/><span>Perspectives rotate automatically</span></div></div>
-              </div>
-            </div>
+            <figure data-fivew-showcase-panel="pulse" hidden={showcase !== "pulse"} className="product-image-view">
+              <div className="product-window-bar"><span><i/><i/><i/></span><b>Humanitarian CVA · 5W1H concept</b><em>Product preview</em></div>
+              <div className="product-image-stage"><img src="/5w1h-dashboard.jpeg" alt="Humanitarian CVA 5W1H cash preparedness and response dashboard concept"/><span className="product-focus focus-flow"><i>01</i><b>Connected coordination view</b></span></div>
+              <figcaption><span>Coordination flow</span><p>A realistic view of how partner activities, response phases and delivery information can come together in one shared coordination space.</p></figcaption>
+            </figure>
 
-            <div data-fivew-showcase-panel="coverage" hidden={showcase !== "coverage"} className="showcase-coverage">
-              <div className="showcase-window-bar"><span><i/><i/><i/></span><b>Coverage perspective</b><em>Illustrative</em></div>
-              <div className="showcase-coverage-body"><div className="coverage-visual"><span className="coverage-shape shape-one"/><span className="coverage-shape shape-two"/><span className="coverage-shape shape-three"/><span className="coverage-shape shape-four"/><i className="coverage-pin pin-one">•</i><i className="coverage-pin pin-two">•</i><i className="coverage-pin pin-three">•</i><i className="coverage-pin pin-four">•</i><b>Geographic reach at a glance</b></div><div className="coverage-ranking"><span>Coverage profile</span><strong>Shared visibility</strong><small>A simple way to communicate relative reach</small>{[["Established","92%"],["Growing","70%"],["Emerging","52%"],["To validate","34%"]].map(([name,width]) => <div key={name}><span>{name}</span><i><b style={{width}}/></i><em>{name}</em></div>)}</div></div>
-            </div>
+            <figure data-fivew-showcase-panel="coverage" hidden={showcase !== "coverage"} className="product-image-view coverage-focus">
+              <div className="product-window-bar"><span><i/><i/><i/></span><b>Humanitarian CVA · 5W1H concept</b><em>Product preview</em></div>
+              <div className="product-image-stage"><img src="/5w1h-dashboard.jpeg" alt="Humanitarian CVA 5W1H dashboard showing an illustrative coverage map"/><span className="product-focus focus-coverage"><i>02</i><b>Geographic coverage</b></span></div>
+              <figcaption><span>Coverage perspective</span><p>Maps and summary views help coordination actors understand geographic reach and bring areas requiring further attention into focus.</p></figcaption>
+            </figure>
 
-            <div data-fivew-showcase-panel="gaps" hidden={showcase !== "gaps"} className="showcase-gaps">
-              <div className="showcase-window-bar"><span><i/><i/><i/></span><b>Coordination signal monitor</b><em>Illustrative</em></div>
-              <div className="showcase-gap-body"><div className="signal-radar"><i/><i/><i/><span>5W1H</span></div><div className="signal-alerts"><article><span>Coverage signal</span><b>Where might attention be needed?</b><p>Highlight areas that appear less visible or require further coordination.</p></article><article><span>Overlap signal</span><b>Where should partners compare plans?</b><p>Encourage dialogue when activities appear similar in place, time or approach.</p></article><article><span>Information signal</span><b>Which details need clarification?</b><p>Identify incomplete information before sharing a coordination picture.</p></article></div></div>
-            </div>
+            <figure data-fivew-showcase-panel="gaps" hidden={showcase !== "gaps"} className="product-image-view gaps-focus">
+              <div className="product-window-bar"><span><i/><i/><i/></span><b>Humanitarian CVA · 5W1H concept</b><em>Product preview</em></div>
+              <div className="product-image-stage"><img src="/5w1h-dashboard.jpeg" alt="Humanitarian CVA 5W1H dashboard showing illustrative coordination insights"/><span className="product-focus focus-gaps"><i>03</i><b>Coordination insights</b></span></div>
+              <figcaption><span>Coordination signals</span><p>Visual summaries can make possible gaps, overlaps and incomplete information easier to discuss across humanitarian partners.</p></figcaption>
+            </figure>
           </div>
         </div>
       </section>
