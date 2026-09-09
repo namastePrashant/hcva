@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import InternalHeader from "./InternalHeader";
 
 type Resource = {
@@ -213,23 +213,209 @@ const resources: Resource[] = [
 
 const topics = ["All", "CVA essentials", "Market analysis", "Digital payments", "Anticipatory action", "Protection", "Inclusion", "Programme quality", "Responsible data", "Preparedness"];
 
-const omniReplies: Record<string, string> = {
-  beginner: "Start with Kaya’s CVA Fundamentals course, then use CALP’s Cash 101 and Glossary as desk references. Together they cover core terms, feasibility, modalities, and the project cycle.",
-  market: "For market skills, begin with DisasterReady’s Introduction to Market Analysis, then move to A Practical Guide to Market Analysis for scenario-based practice.",
-  job: "There is one time-sensitive opening in this snapshot: British Red Cross CVA Coordinator — Syria, closing 30 August 2026. Open the Opportunities section for the full summary.",
-  event: "The next listed event is the Eastern Africa Dialogue Platform on Anticipatory Action, 28–30 October 2026 in Mombasa, Kenya.",
-  protection: "The CVA and Child Protection e-Course is the strongest match. It covers assessment, design, implementation, safeguarding, and age- and gender-specific risks.",
-  services: "Humanitarian CVA brings together Aria Technologies’ CVA advisory, digital system design, implementation support, and capacity strengthening. Lali360 is the flagship platform supporting the project cycle from assessment to reporting.",
+type OmniLink = { label: string; url: string };
+type OmniMessage = { role: "user" | "bot"; text: string; links?: OmniLink[] };
+
+const events = [
+  {
+    title: "CALP Core CVA Skills for Programme Staff",
+    when: "24–28 August 2026",
+    where: "Kathmandu, Nepal",
+    url: "https://www.calpnetwork.org/event/calp-core-cva-skills-for-programme-staff-course-in-the-nepal/",
+  },
+  {
+    title: "2nd Eastern Africa Dialogue Platform on Anticipatory Action",
+    when: "28–30 October 2026",
+    where: "Mombasa, Kenya",
+    url: "https://www.calpnetwork.org/events/find-an-event/events/",
+  },
+];
+
+const openings = [
+  {
+    title: "CVA Coordinator — Syria",
+    org: "British Red Cross",
+    closing: "30 August 2026",
+    url: "https://reliefweb.int/jobs?search=cash%20and%20voucher",
+  },
+];
+
+const resourceLink = (title: string): OmniLink | null => {
+  const match = resources.find((resource) => resource.title === title);
+  return match ? { label: `${match.title} — ${match.provider}`, url: match.url } : null;
 };
 
-function answerOmni(message: string) {
+const compact = (links: (OmniLink | null)[]): OmniLink[] =>
+  links.filter((link): link is OmniLink => Boolean(link));
+
+/**
+ * Curated, offline navigator over the snapshot on this page: resources, events,
+ * openings, services and the 5W1H tool. Keyword intents first, full-text search
+ * over the resource library as a fallback.
+ */
+function answerOmni(message: string): OmniMessage {
   const value = message.toLowerCase();
-  if (value.includes("market")) return omniReplies.market;
-  if (value.includes("job") || value.includes("career") || value.includes("opening")) return omniReplies.job;
-  if (value.includes("event") || value.includes("conference")) return omniReplies.event;
-  if (value.includes("protection") || value.includes("child")) return omniReplies.protection;
-  if (value.includes("service") || value.includes("consult") || value.includes("lali360") || value.includes("digital")) return omniReplies.services;
-  return omniReplies.beginner;
+  const has = (...terms: string[]) => terms.some((term) => value.includes(term));
+
+  if (["hi", "hello", "hey", "hi there", "hello there", "hey there", "yo"].includes(value.trim())) {
+    return {
+      role: "bot",
+      text: "Hi! Ask me about getting started with CVA, market analysis, digital payments, protection, preparedness, anticipatory action, events, current openings, or our services.",
+    };
+  }
+
+  if (has("thank")) {
+    return { role: "bot", text: "You’re welcome. Ask me anything else about the CVA snapshot on this page." };
+  }
+
+  if (has("market", "price monitoring", "supply chain", "response analysis")) {
+    return {
+      role: "bot",
+      text: "For market skills, start with DisasterReady’s Introduction to Market Analysis, then work through A Practical Guide to Market Analysis for scenario-based practice.",
+      links: compact([
+        resourceLink("Introduction to Market Analysis"),
+        resourceLink("A Practical Guide to Market Analysis"),
+      ]),
+    };
+  }
+
+  if (has("job", "career", "opening", "vacanc", "hiring", "recruit", "consultanc", "cva role", "apply for")) {
+    return {
+      role: "bot",
+      text: `This snapshot lists ${openings.length} time-sensitive opening: ${openings
+        .map((opening) => `${opening.org} — ${opening.title} (closing ${opening.closing})`)
+        .join("; ")}. Always confirm status on the source page.`,
+      links: [
+        ...openings.map((opening) => ({ label: `${opening.title} · ${opening.org}`, url: opening.url })),
+        { label: "Browse CALP opportunities", url: "https://www.calpnetwork.org/jobs/" },
+      ],
+    };
+  }
+
+  if (has("event", "events", "conference", "webinar", "workshop", "dialogue platform", "training course")) {
+    return {
+      role: "bot",
+      text: `Upcoming in this snapshot: ${events
+        .map((item) => `${item.title} — ${item.when}, ${item.where}`)
+        .join(" · ")}.`,
+      links: events.map((item) => ({ label: `${item.title} (${item.when})`, url: item.url })),
+    };
+  }
+
+  if (has("child", "protection", "safeguard", "gbv", "gender-based")) {
+    return {
+      role: "bot",
+      text: "The CVA and Child Protection e-Course is the strongest match — it covers assessment, programme design, safeguarding and age- and gender-specific risks.",
+      links: compact([resourceLink("CVA and Child Protection e-Course")]),
+    };
+  }
+
+  if (has("disab", "inclusion", "inclusive", "accessib")) {
+    return {
+      role: "bot",
+      text: "Disability Inclusive CVA covers disability data, participation, extra costs and accessible service delivery across the programme cycle.",
+      links: compact([resourceLink("Disability Inclusive CVA")]),
+    };
+  }
+
+  if (has("data responsib", "responsible data", "privacy", "data protection", "information management", "data lifecycle")) {
+    return {
+      role: "bot",
+      text: "For responsible data, use CALP’s Data Responsibility Toolkit (seven tipsheets plus case studies) alongside Cash Hub’s Information Management & Technology collection.",
+      links: compact([
+        resourceLink("Data Responsibility Toolkit"),
+        resourceLink("Information Management & Technology"),
+      ]),
+    };
+  }
+
+  if (has("digital", "payment", "fsp", "mobile money", "lali360", "lali 360", "system", "platform", "reconcil")) {
+    return {
+      role: "bot",
+      text: "Humanitarian CVA covers Aria Technologies’ CVA advisory, digital system design, implementation support and capacity strengthening. Lali360 is the flagship platform running the project cycle from assessment to reporting. For payments guidance, GSMA’s mobile money handbook is the deepest reference.",
+      links: compact([
+        { label: "Explore Lali360", url: "https://lali360.com/" },
+        resourceLink("Mobilising CVA: The Case for Mobile Money"),
+        resourceLink("Information Management & Technology"),
+      ]),
+    };
+  }
+
+  if (has("prepared", "readiness", "ocrt", "sop", "contingency", "capacity plan")) {
+    return {
+      role: "bot",
+      text: "For preparedness, run CALP’s Organizational Cash Readiness Tool to find gaps, then use the Cash Hub / IFRC / ICRC Checklist for Basic CVA Readiness for minimum operational steps.",
+      links: compact([
+        resourceLink("Organizational Cash Readiness Tool"),
+        resourceLink("Checklist for Basic CVA Readiness"),
+      ]),
+    };
+  }
+
+  if (has("anticipatory", "early action", "forecast", "trigger", "risk financing")) {
+    return {
+      role: "bot",
+      text: "On anticipatory action, see Cash Hub’s 2026 research “CVA in Anticipatory Action: What Have We Learned?” for emerging learning on cash before predictable hazards.",
+      links: compact([resourceLink("CVA in Anticipatory Action: What Have We Learned?")]),
+    };
+  }
+
+  if (has("5w", "5w1h", "coordinat", "who is doing what", "matrix", "cash working group")) {
+    return {
+      role: "bot",
+      text: "The 5W1H workspace turns fragmented response records into a filterable “who, what, where, when, why and how” coordination view. The current figures are sample Nepal data for demonstration.",
+      links: [{ label: "Open the 5W1H workspace", url: "/5w1h" }],
+    };
+  }
+
+  if (has("your service", "our service", "consult", "advisor", "advisory", "aria technolog", "work with you", "hire you", "engage you")) {
+    return {
+      role: "bot",
+      text: "We help humanitarian actors turn CVA requirements into working systems: strategy and process design, field-ready digital services, and practical capacity building — backed by the Lali360 platform.",
+      links: [
+        { label: "Explore our services", url: "/services" },
+        { label: "Explore Lali360", url: "https://lali360.com/" },
+      ],
+    };
+  }
+
+  if (has("begin", "start", "started", "new to", "beginner", "fundamental", "cash 101", "101", "basics", "introduction", "glossary", "terminolog")) {
+    return {
+      role: "bot",
+      text: "Start with Kaya’s CVA Fundamentals course, then keep CALP’s Cash 101 and the Glossary of CVA Terminology as desk references. Together they cover core terms, feasibility, modalities and the project cycle.",
+      links: compact([
+        resourceLink("Cash and Voucher Assistance — The Fundamentals"),
+        resourceLink("Cash 101: CVA Explained"),
+        resourceLink("Glossary of CVA Terminology"),
+      ]),
+    };
+  }
+
+  const needle = value.replace(/[^a-z0-9\s]/g, " ").split(/\s+/).filter((word) => word.length > 3);
+  if (needle.length) {
+    const hits = resources
+      .map((resource) => {
+        const haystack = `${resource.title} ${resource.provider} ${resource.topic} ${resource.format} ${resource.level} ${resource.description}`.toLowerCase();
+        return { resource, score: needle.reduce((total, word) => total + (haystack.includes(word) ? 1 : 0), 0) };
+      })
+      .filter((entry) => entry.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 3);
+
+    if (hits.length) {
+      return {
+        role: "bot",
+        text: `Here ${hits.length === 1 ? "is" : "are"} the closest match${hits.length === 1 ? "" : "es"} in the curated library:`,
+        links: hits.map(({ resource }) => ({ label: `${resource.title} — ${resource.provider}`, url: resource.url })),
+      };
+    }
+  }
+
+  return {
+    role: "bot",
+    text: "I answer from the curated snapshot on this page. Try a topic like “market analysis”, “digital payments”, “protection”, “preparedness”, “anticipatory action”, “events”, “openings” or “services” — or browse the full learning hub.",
+    links: [{ label: "Open the learning hub", url: "/learning" }],
+  };
 }
 
 export default function HomePage() {
@@ -238,7 +424,10 @@ export default function HomePage() {
   const [showAll, setShowAll] = useState(false);
   const [omniOpen, setOmniOpen] = useState(false);
   const [omniInput, setOmniInput] = useState("");
-  const [conversation, setConversation] = useState<string[]>([]);
+  const [messages, setMessages] = useState<OmniMessage[]>([]);
+  const [omniPending, setOmniPending] = useState(false);
+  const messagesRef = useRef<HTMLDivElement>(null);
+  const omniInputRef = useRef<HTMLInputElement>(null);
 
   const filtered = useMemo(() => {
     const needle = query.trim().toLowerCase();
@@ -251,11 +440,26 @@ export default function HomePage() {
 
   const visibleResources = filtered;
 
+  useEffect(() => {
+    const node = messagesRef.current;
+    if (node) node.scrollTop = node.scrollHeight;
+  }, [messages, omniPending]);
+
+  useEffect(() => {
+    if (omniOpen) omniInputRef.current?.focus();
+  }, [omniOpen]);
+
   function askOmni(question: string) {
     const clean = question.trim();
-    if (!clean) return;
-    setConversation([clean, answerOmni(clean)]);
+    if (!clean || omniPending) return;
+    setOmniOpen(true);
+    setMessages((prev) => [...prev, { role: "user", text: clean }]);
     setOmniInput("");
+    setOmniPending(true);
+    window.setTimeout(() => {
+      setMessages((prev) => [...prev, answerOmni(clean)]);
+      setOmniPending(false);
+    }, 420);
   }
 
   function submitOmni(event: FormEvent) {
@@ -520,12 +724,37 @@ export default function HomePage() {
 
       <aside className={`omni-panel ${omniOpen ? "open" : ""}`} aria-hidden={!omniOpen} aria-label="Omni CVA assistant">
         <div className="omni-panel-head"><div><span>✦</span><p><b>Omni</b><small><i /> Curated guide</small></p></div><button onClick={() => setOmniOpen(false)} aria-label="Close Omni">×</button></div>
-        <div className="omni-messages">
+        <div className="omni-messages" ref={messagesRef} aria-live="polite">
           <div className="bot-message">Hi—I can point you to learning, events, and opportunities in this curated snapshot. What are you working on?</div>
-          {conversation.length > 0 && <><div className="user-message">{conversation[0]}</div><div className="bot-message">{conversation[1]}</div></>}
-          {conversation.length === 0 && <div className="chat-suggestions"><button onClick={() => askOmni("I’m new to CVA. Where should I begin?")}>Where should a beginner start?</button><button onClick={() => askOmni("Help me learn market analysis")}>Help me learn market analysis</button><button onClick={() => askOmni("Show me CVA jobs")}>Show me current openings</button></div>}
+          {messages.map((message, index) => (
+            <div key={index} className={message.role === "user" ? "user-message" : "bot-message"}>
+              {message.text}
+              {message.links && message.links.length > 0 && (
+                <div className="omni-msg-links">
+                  {message.links.map((link) => (
+                    <a
+                      key={link.url + link.label}
+                      href={link.url}
+                      {...(link.url.startsWith("/") ? {} : { target: "_blank", rel: "noreferrer" })}
+                    >
+                      {link.label} <b>{link.url.startsWith("/") ? "→" : "↗"}</b>
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+          {omniPending && <div className="bot-message typing" aria-label="Omni is typing"><i /><i /><i /></div>}
+          {messages.length === 0 && !omniPending && (
+            <div className="chat-suggestions">
+              <button onClick={() => askOmni("I’m new to CVA. Where should I begin?")}>Where should a beginner start?</button>
+              <button onClick={() => askOmni("Help me learn market analysis")}>Help me learn market analysis</button>
+              <button onClick={() => askOmni("Show me current CVA openings")}>Show me current openings</button>
+              <button onClick={() => askOmni("What events are coming up?")}>What events are coming up?</button>
+            </div>
+          )}
         </div>
-        <form className="omni-input" onSubmit={submitOmni}><input value={omniInput} onChange={(event) => setOmniInput(event.target.value)} placeholder="Ask about CVA…" aria-label="Ask Omni"/><button aria-label="Send question">↑</button></form>
+        <form className="omni-input" onSubmit={submitOmni}><input ref={omniInputRef} value={omniInput} onChange={(event) => setOmniInput(event.target.value)} placeholder="Ask about CVA…" aria-label="Ask Omni"/><button aria-label="Send question" disabled={omniPending || !omniInput.trim()}>↑</button></form>
         <small className="omni-disclaimer">Omni answers from the curated Humanitarian CVA snapshot.</small>
       </aside>
     </main>
