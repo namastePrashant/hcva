@@ -1,0 +1,14 @@
+{
+  "name": "hcva-hostinger-static",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "node build-static.mjs"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0"
+  }
+}

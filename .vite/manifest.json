@@ -1,0 +1,72 @@
+{
+  "_framework-BgSIrAUN.js": {
+    "file": "_next/static/chunks/framework-BgSIrAUN.js",
+    "name": "framework",
+    "imports": [
+      "_rolldown-runtime-C60lm6uB.js"
+    ]
+  },
+  "_rolldown-runtime-C60lm6uB.js": {
+    "file": "_next/static/chunks/rolldown-runtime-C60lm6uB.js",
+    "name": "rolldown-runtime"
+  },
+  "components/FiveWTool.tsx": {
+    "file": "_next/static/chunks/FiveWTool-C1GtVIKb.js",
+    "name": "FiveWTool",
+    "src": "components/FiveWTool.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-C60lm6uB.js",
+      "_framework-BgSIrAUN.js"
+    ]
+  },
+  "components/HomePage.tsx": {
+    "file": "_next/static/chunks/HomePage-mxNp08P8.js",
+    "name": "HomePage",
+    "src": "components/HomePage.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-C60lm6uB.js",
+      "components/InternalHeader.tsx",
+      "_framework-BgSIrAUN.js"
+    ]
+  },
+  "components/InternalHeader.tsx": {
+    "file": "_next/static/chunks/InternalHeader-D_1GQWPp.js",
+    "name": "InternalHeader",
+    "src": "components/InternalHeader.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-C60lm6uB.js",
+      "_framework-BgSIrAUN.js"
+    ]
+  },
+  "node_modules/vinext/dist/shims/layout-segment-context.js": {
+    "file": "_next/static/chunks/layout-segment-context-CCggni5D.js",
+    "name": "layout-segment-context",
+    "src": "node_modules/vinext/dist/shims/layout-segment-context.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-C60lm6uB.js",
+      "virtual:vinext-app-browser-entry",
+      "_framework-BgSIrAUN.js"
+    ]
+  },
+  "virtual:vinext-app-browser-entry": {
+    "file": "_next/static/chunks/index-CF9mkvb9.js",
+    "name": "index",
+    "src": "virtual:vinext-app-browser-entry",
+    "isEntry": true,
+    "imports": [
+      "_rolldown-runtime-C60lm6uB.js",
+      "_framework-BgSIrAUN.js"
+    ],
+    "dynamicImports": [
+      "virtual:vinext-app-browser-entry",
+      "node_modules/vinext/dist/shims/layout-segment-context.js",
+      "components/InternalHeader.tsx",
+      "components/FiveWTool.tsx",
+      "components/HomePage.tsx"
+    ]
+  }
+}
