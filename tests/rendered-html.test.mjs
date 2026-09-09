@@ -1,91 +1,79 @@
 import assert from "node:assert/strict";
-import { access, readFile, readdir } from "node:fs/promises";
 import test from "node:test";
 
-const developmentPreviewMeta =
-  /<meta(?=[^>]*\bname=["']codex-preview["'])(?=[^>]*\bcontent=["']development["'])[^>]*>/i;
-const templateRoot = new URL("../", import.meta.url);
-const previewRoot = new URL("../app/_sites-preview/", import.meta.url);
+const ASSET_STUB = {
+  ASSETS: { fetch: async () => new Response("Not found", { status: 404 }) },
+};
+const CTX = { waitUntil() {}, passThroughOnException() {} };
 
-async function render() {
+async function loadWorker() {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
   workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
   const { default: worker } = await import(workerUrl.href);
+  return worker;
+}
 
+async function fetchPath(path, { host = "localhost" } = {}) {
+  const worker = await loadWorker();
   return worker.fetch(
-    new Request("http://localhost/", {
-      headers: { accept: "text/html" },
-    }),
-    {
-      ASSETS: {
-        fetch: async () => new Response("Not found", { status: 404 }),
-      },
-    },
-    {
-      waitUntil() {},
-      passThroughOnException() {},
-    },
+    new Request(`http://${host}${path}`, { headers: { accept: "text/html" } }),
+    ASSET_STUB,
+    CTX,
   );
 }
 
-test("server-renders the starter loading skeleton", async () => {
-  const response = await render();
+test("home page renders with core SEO tags", async () => {
+  const response = await fetchPath("/");
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, developmentPreviewMeta);
-  assert.match(html, /<title>Your site is taking shape<\/title>/i);
-  assert.match(html, /Building your site/);
-  assert.match(html, /Your site is taking shape/);
-  assert.match(
-    html,
-    /Your first version will appear here automatically when it’s ready\./,
-  );
-  assert.doesNotMatch(html, /Codex/);
-  assert.match(html, /react-loading-skeleton/);
-  assert.match(html, /role="status"/);
+  assert.match(html, /<title>[^<]*Humanitarian CVA[^<]*<\/title>/i);
+  assert.match(html, /<link[^>]+rel="canonical"[^>]+href="[^"]*humanitariancva\.org\/?"/i);
+  assert.match(html, /<meta[^>]+property="og:image"/i);
+  assert.match(html, /"@type":"Organization"/);
+  assert.match(html, /"@type":"WebSite"/);
 });
 
-test("keeps the loading skeleton scoped and disposable", async () => {
-  const [preview, css, page, layout, packageJson, files] = await Promise.all([
-    readFile(new URL("SkeletonPreview.tsx", previewRoot), "utf8"),
-    readFile(new URL("preview.css", previewRoot), "utf8"),
-    readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../package.json", import.meta.url), "utf8"),
-    readdir(previewRoot),
-  ]);
+test("applies security headers", async () => {
+  const response = await fetchPath("/");
+  assert.equal(response.headers.get("x-content-type-options"), "nosniff");
+  assert.equal(response.headers.get("referrer-policy"), "strict-origin-when-cross-origin");
+  assert.ok(response.headers.get("strict-transport-security"));
+});
 
-  assert.deepEqual(files.sort(), ["SkeletonPreview.tsx", "preview.css"]);
-  assert.match(preview, /from "react-loading-skeleton"/);
-  assert.match(preview, /baseColor="#eceae7"/);
-  assert.match(preview, /highlightColor="#f9f8f6"/);
-  assert.match(preview, /duration=\{2\.8\}/);
-  assert.match(preview, /sites-skeleton-search-placeholder/);
-  assert.match(packageJson, /"react-loading-skeleton": "3\.5\.0"/);
+test("redirects the www and .com hosts to the canonical origin", async () => {
+  for (const host of [
+    "www.humanitariancva.org",
+    "humanitariancva.com",
+    "www.humanitariancva.com",
+  ]) {
+    const response = await fetchPath("/services", { host });
+    assert.equal(response.status, 308, `${host} should redirect`);
+    assert.equal(
+      response.headers.get("location"),
+      "https://humanitariancva.org/services",
+    );
+  }
+});
 
-  const shellIndex = preview.indexOf('className="sites-skeleton-shell"');
-  const statusIndex = preview.indexOf('className="sites-skeleton-status"');
-  assert.ok(shellIndex >= 0 && statusIndex > shellIndex);
-  assert.match(css, /position:\s*fixed/);
-  assert.match(css, /inset:\s*0/);
-  assert.match(css, /opacity:\s*0\.52/);
-  assert.match(css, /prefers-reduced-motion:\s*reduce/);
-  assert.doesNotMatch(css, /#020617|canvas|pets|progress/i);
-  assert.doesNotMatch(
-    preview,
-    /loading-spinner|status-mark|status-progress|canvas|cookie|random/i,
-  );
+test("serves robots.txt and sitemap.xml", async () => {
+  const robots = await fetchPath("/robots.txt");
+  assert.equal(robots.status, 200);
+  assert.match(await robots.text(), /Sitemap:\s*https:\/\/humanitariancva\.org\/sitemap\.xml/i);
 
-  assert.match(page, /export const metadata:\s*Metadata/);
-  assert.match(page, /"codex-preview": "development"/);
-  assert.match(page, /<SkeletonPreview \/>/);
-  assert.match(layout, /title:\s*"Starter Project"/);
-  assert.doesNotMatch(layout, /codex-preview|_sites-preview|themeColor|\bViewport\b/);
-  assert.doesNotMatch(css, /(^|\s)(html|body)\s*\{/m);
+  const sitemap = await fetchPath("/sitemap.xml");
+  assert.equal(sitemap.status, 200);
+  const xml = await sitemap.text();
+  assert.match(xml, /<loc>https:\/\/humanitariancva\.org<\/loc>/);
+  assert.match(xml, /\/insights\/nepal-digital-payments-humanitarian-cash/);
+});
 
-  await assert.rejects(
-    access(new URL("public/_sites-preview", templateRoot)),
-  );
+test("content route renders its own canonical and title", async () => {
+  const response = await fetchPath("/services");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /<link[^>]+rel="canonical"[^>]+href="[^"]*\/services"/i);
+  assert.match(html, /Consulting &(amp;)? Digital Services/i);
+  assert.match(html, /"@type":"BreadcrumbList"/);
 });

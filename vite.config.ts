@@ -11,9 +11,21 @@ const { d1, r2 } = hostingConfig;
 // macOS Seatbelt blocks FSEvents, so Codex previews need polling for HMR.
 const isCodexSeatbeltSandbox = process.env.CODEX_SANDBOX === "seatbelt";
 
+// The deployed Worker name and the custom domains it serves. `routes` with
+// `custom_domain: true` requires each apex/host to be an active zone in the
+// Cloudflare account performing the deploy.
 const localBindingConfig = {
+  name: "humanitarian-cva",
   main: "./worker/index.ts",
+  compatibility_date: "2026-05-15",
   compatibility_flags: ["nodejs_compat"],
+  routes: [
+    { pattern: "humanitariancva.org", custom_domain: true },
+    { pattern: "www.humanitariancva.org", custom_domain: true },
+    { pattern: "humanitariancva.com", custom_domain: true },
+    { pattern: "www.humanitariancva.com", custom_domain: true },
+  ],
+  observability: { enabled: true },
   d1_databases: d1
     ? [
         {
