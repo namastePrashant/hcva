@@ -11,20 +11,26 @@ const { d1, r2 } = hostingConfig;
 // macOS Seatbelt blocks FSEvents, so Codex previews need polling for HMR.
 const isCodexSeatbeltSandbox = process.env.CODEX_SANDBOX === "seatbelt";
 
-// The deployed Worker name and the custom domains it serves. `routes` with
-// `custom_domain: true` requires each apex/host to be an active zone in the
-// Cloudflare account performing the deploy.
+// Worker name must match the Cloudflare Workers Builds project ("hcva").
+//
+// Custom domains are intentionally NOT declared here. Attaching them from config
+// fails with API error 100117 ("Hostname already has externally managed DNS
+// records") while the apex/www records still point at the previous host. Once
+// those DNS records are removed, add the custom domains in the dashboard
+// (Workers & Pages -> hcva -> Settings -> Domains & Routes -> Add) or re-enable
+// the `routes` block below and redeploy:
+//
+//   routes: [
+//     { pattern: "humanitariancva.org", custom_domain: true },
+//     { pattern: "www.humanitariancva.org", custom_domain: true },
+//     { pattern: "humanitariancva.com", custom_domain: true },
+//     { pattern: "www.humanitariancva.com", custom_domain: true },
+//   ],
 const localBindingConfig = {
-  name: "humanitarian-cva",
+  name: "hcva",
   main: "./worker/index.ts",
   compatibility_date: "2026-05-15",
   compatibility_flags: ["nodejs_compat"],
-  routes: [
-    { pattern: "humanitariancva.org", custom_domain: true },
-    { pattern: "www.humanitariancva.org", custom_domain: true },
-    { pattern: "humanitariancva.com", custom_domain: true },
-    { pattern: "www.humanitariancva.com", custom_domain: true },
-  ],
   observability: { enabled: true },
   d1_databases: d1
     ? [

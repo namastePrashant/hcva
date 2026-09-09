@@ -41,14 +41,16 @@ npm run lint
 - `app/robots.ts` and `app/sitemap.ts` derive from `SITE_ORIGIN` and the
   `data/insights.ts` list.
 - The Worker redirects `www.*` and the `.com` domain to the canonical
-  `.org` origin and sets baseline security headers.
+  `.org` origin (once those hostnames are routed to it) and sets baseline
+  security headers.
 - Known follow-up: `public/og-hcva.png` is ~2 MB / 1731×909 — regenerate a
   ~1200×630, <300 KB card for faster social unfurls.
 
 ## Deployment
 
-- **Cloudflare Workers (primary):** see [`CLOUDFLARE-DEPLOYMENT.md`](./CLOUDFLARE-DEPLOYMENT.md).
-  `npm run deploy`, or push to `main` (GitHub Actions).
+- **Cloudflare Workers (primary):** Worker `hcva`, deployed by Cloudflare
+  Workers Builds on every push to `main`. Custom domains are attached in the
+  dashboard. See [`CLOUDFLARE-DEPLOYMENT.md`](./CLOUDFLARE-DEPLOYMENT.md).
 - **Hostinger static export (secondary):** see [`HOSTINGER-DEPLOYMENT.md`](./HOSTINGER-DEPLOYMENT.md).
 
 ## Project shape

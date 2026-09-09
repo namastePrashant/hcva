@@ -1,8 +1,10 @@
 name: Deploy to Cloudflare Workers
 
+# Manual fallback only. The primary CI is Cloudflare Workers Builds (connected to
+# this repo, deploys the "hcva" Worker on every push to main). Keep this on
+# workflow_dispatch so the two systems never deploy the same Worker at once.
+# Requires repo secrets CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID.
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
